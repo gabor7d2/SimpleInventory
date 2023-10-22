@@ -1,7 +1,7 @@
 # Házi feladat specifikáció
 
 ## Mobil- és webes szoftverek
-### 2023.
+### 2023. 10. 22.
 ### Simple Inventory
 ### Tóth Gábor Tamás - HAFLCT
 ### toth.gabor.tamas@edu.bme.hu
