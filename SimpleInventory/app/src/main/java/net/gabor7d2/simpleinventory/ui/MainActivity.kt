@@ -1,5 +1,6 @@
-package net.gabor7d2.simpleinventory
+package net.gabor7d2.simpleinventory.ui
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -15,6 +17,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val prefs = getSharedPreferences("SimpleInventoryCredentials", MODE_PRIVATE)
+        val loggedIn = prefs.getBoolean("LoggedIn", false)
+        if (!loggedIn) {
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
