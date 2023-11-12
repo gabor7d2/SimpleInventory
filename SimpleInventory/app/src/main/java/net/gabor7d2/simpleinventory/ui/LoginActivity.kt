@@ -23,6 +23,7 @@ class LoginActivity : AppCompatActivity() {
 
         if (Firebase.auth.currentUser != null) {
             afterSignIn()
+            return
         }
 
         prefs = Preferences(this)
@@ -38,8 +39,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signInToFirebase() {
+        if (binding.etEmail.text.isEmpty() || binding.etPassword.text.isEmpty()) {
+            Toast.makeText(
+                baseContext,
+                R.string.login_error_empty,
+                Toast.LENGTH_SHORT,
+            ).show()
+            return
+        }
+
         binding.buttonLogin.isEnabled = false
-        val prefs = Preferences(this)
 
         Firebase.auth.signInWithEmailAndPassword(
             binding.etEmail.text.toString(),

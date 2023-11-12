@@ -12,14 +12,15 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="net.gabor7d2.simpleinventory.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_categories"
+        android:name="net.gabor7d2.simpleinventory.ui.category.CategoriesFragment"
+        android:label="@string/title_categories"
+        tools:layout="@layout/fragment_categories" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="net.gabor7d2.simpleinventory.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_items"
+        android:name="net.gabor7d2.simpleinventory.ui.item.ItemsFragment"
+        android:label="@string/title_items"
+        tools:layout="@layout/fragment_items" />
+
 </navigation>

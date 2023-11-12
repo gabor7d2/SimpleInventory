@@ -7,4 +7,7 @@
     <string name="prompt_password">Password</string>
     <string name="button_login">Login</string>
     <string name="login_error">Login failed</string>
+    <string name="login_error_empty">Login failed: email or password not specified</string>
+    <string name="title_categories">Categories</string>
+    <string name="title_items">Items</string>
 </resources>

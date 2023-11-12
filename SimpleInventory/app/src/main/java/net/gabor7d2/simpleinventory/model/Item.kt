@@ -1,0 +1,6 @@
+package net.gabor7d2.simpleinventory.model
+
+data class Item(
+    val id: String,
+    val name: String
+)
