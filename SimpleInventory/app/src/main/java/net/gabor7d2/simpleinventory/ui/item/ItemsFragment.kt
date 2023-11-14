@@ -27,9 +27,9 @@ class ItemsFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = ItemsRecyclerViewAdapter(
                 listOf(
-                    Item("1", "Bread"),
-                    Item("2", "HDMI cable"),
-                    Item("3", "Isaac Asimov: Foundation Empire")
+                    Item("1", "Bread", "1"),
+                    Item("2", "HDMI cable", "2"),
+                    Item("3", "Isaac Asimov: Foundation Empire", "3")
                 )
             )
         }
