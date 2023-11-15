@@ -14,7 +14,7 @@
         android:theme="@style/Theme.SimpleInventory"
         tools:targetApi="31" >
         <activity
-            android:name=".ui.LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:exported="true"
             android:noHistory="true"
             android:windowSoftInputMode="adjustResize" >
@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:exported="false"
             android:label="@string/app_name" >
         </activity>

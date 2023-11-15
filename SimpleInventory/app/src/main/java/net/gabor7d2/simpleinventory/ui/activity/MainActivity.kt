@@ -1,4 +1,4 @@
-package net.gabor7d2.simpleinventory.ui
+package net.gabor7d2.simpleinventory.ui.activity
 
 import android.os.Bundle
 import android.util.Log

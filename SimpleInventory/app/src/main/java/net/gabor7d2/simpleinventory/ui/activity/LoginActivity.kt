@@ -1,4 +1,4 @@
-package net.gabor7d2.simpleinventory.ui
+package net.gabor7d2.simpleinventory.ui.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
