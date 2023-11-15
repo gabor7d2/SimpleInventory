@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import net.gabor7d2.simpleinventory.databinding.FragmentCategoriesBinding
+import net.gabor7d2.simpleinventory.db.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.model.Category
+import net.gabor7d2.simpleinventory.ui.ListItemRecyclerViewAdapter
 
 class CategoriesFragment : Fragment() {
 
@@ -22,15 +24,12 @@ class CategoriesFragment : Fragment() {
     ): View {
         _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
 
+        val adapter = ListItemRecyclerViewAdapter<Category>()
+        RepositoryManager.instance.addCategoryChildrenListener(null, adapter)
+
         with(binding.list) {
             layoutManager = LinearLayoutManager(context)
-            adapter = CategoriesRecyclerViewAdapter(
-                listOf(
-                    Category("1", "Food"),
-                    Category("2", "Electronic"),
-                    Category("3", "Book")
-                )
-            )
+            this.adapter = adapter
         }
 
         return binding.root

@@ -7,8 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import net.gabor7d2.simpleinventory.databinding.FragmentItemsBinding
-import net.gabor7d2.simpleinventory.model.Category
+import net.gabor7d2.simpleinventory.db.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.model.Item
+import net.gabor7d2.simpleinventory.ui.ListItemRecyclerViewAdapter
 
 class ItemsFragment : Fragment() {
 
@@ -23,15 +24,12 @@ class ItemsFragment : Fragment() {
     ): View {
         _binding = FragmentItemsBinding.inflate(inflater, container, false)
 
+        val adapter = ListItemRecyclerViewAdapter<Item>()
+        RepositoryManager.instance.addItemChildrenListener(null, adapter)
+
         with(binding.list) {
             layoutManager = LinearLayoutManager(context)
-            adapter = ItemsRecyclerViewAdapter(
-                listOf(
-                    Item("1", "Bread", "1"),
-                    Item("2", "HDMI cable", "2"),
-                    Item("3", "Isaac Asimov: Foundation Empire", "3")
-                )
-            )
+            this.adapter = adapter
         }
 
         return binding.root

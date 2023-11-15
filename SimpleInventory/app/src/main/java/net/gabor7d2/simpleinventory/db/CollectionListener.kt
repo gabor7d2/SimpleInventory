@@ -1,6 +1,6 @@
 package net.gabor7d2.simpleinventory.db
 
-interface CollectionListener<ID, T> {
+interface CollectionListener<T> {
 
     fun onAdded(entity: T)
 

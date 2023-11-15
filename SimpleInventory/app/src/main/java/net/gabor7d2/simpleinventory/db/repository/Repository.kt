@@ -13,9 +13,9 @@ abstract class Repository {
     protected val categoryListeners: MutableMap<String, MutableList<EntityListener<Category>>> = mutableMapOf()
     protected val itemListeners: MutableMap<String, MutableList<EntityListener<Item>>> = mutableMapOf()
 
-    protected val categoryChildrenListeners: MutableMap<String?, MutableList<CollectionListener<String, Category>>> = mutableMapOf()
-    protected val itemChildrenListeners: MutableMap<String?, MutableList<CollectionListener<String, Item>>> = mutableMapOf()
-    protected val itemsOfCategoryListeners: MutableMap<String, MutableList<CollectionListener<String, Item>>> = mutableMapOf()
+    protected val categoryChildrenListeners: MutableMap<String?, MutableList<CollectionListener<Category>>> = mutableMapOf()
+    protected val itemChildrenListeners: MutableMap<String?, MutableList<CollectionListener<Item>>> = mutableMapOf()
+    protected val itemsOfCategoryListeners: MutableMap<String, MutableList<CollectionListener<Item>>> = mutableMapOf()
 
     fun addCategoryListener(categoryId: String, listener: EntityListener<Category>) {
         if (categoryListeners[categoryId] == null) {
@@ -53,7 +53,7 @@ abstract class Repository {
         itemListeners.forEach { it.value.remove(listener) }
     }
 
-    fun addCategoryChildrenListener(categoryId: String?, listener: CollectionListener<String, Category>) {
+    fun addCategoryChildrenListener(categoryId: String?, listener: CollectionListener<Category>) {
         if (categoryChildrenListeners[categoryId] == null) {
             categoryChildrenListeners[categoryId] = mutableListOf()
         }
@@ -67,11 +67,11 @@ abstract class Repository {
         }
     }
 
-    fun removeCategoryChildrenListener(listener: CollectionListener<String, Category>) {
+    fun removeCategoryChildrenListener(listener: CollectionListener<Category>) {
         categoryChildrenListeners.forEach { it.value.remove(listener) }
     }
 
-    fun addItemChildrenListener(itemId: String?, listener: CollectionListener<String, Item>) {
+    fun addItemChildrenListener(itemId: String?, listener: CollectionListener<Item>) {
         if (itemChildrenListeners[itemId] == null) {
             itemChildrenListeners[itemId] = mutableListOf()
         }
@@ -85,11 +85,11 @@ abstract class Repository {
         }
     }
 
-    fun removeItemChildrenListener(listener: CollectionListener<String, Item>) {
+    fun removeItemChildrenListener(listener: CollectionListener<Item>) {
         itemChildrenListeners.forEach { it.value.remove(listener) }
     }
 
-    fun addItemsOfCategoryListener(categoryId: String, listener: CollectionListener<String, Item>) {
+    fun addItemsOfCategoryListener(categoryId: String, listener: CollectionListener<Item>) {
         if (itemsOfCategoryListeners[categoryId] == null) {
             itemsOfCategoryListeners[categoryId] = mutableListOf()
         }
@@ -103,7 +103,7 @@ abstract class Repository {
         }
     }
 
-    fun removeItemsOfCategoryListener(listener: CollectionListener<String, Item>) {
+    fun removeItemsOfCategoryListener(listener: CollectionListener<Item>) {
         itemsOfCategoryListeners.forEach { it.value.remove(listener) }
     }
 

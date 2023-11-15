@@ -2,6 +2,7 @@ package net.gabor7d2.simpleinventory.db.repository
 
 import net.gabor7d2.simpleinventory.model.Category
 import net.gabor7d2.simpleinventory.model.Item
+import java.util.UUID
 
 class MemoryRepository : Repository() {
 
@@ -11,13 +12,13 @@ class MemoryRepository : Repository() {
     // TODO create DbItem and DbCategory classes, generate ids
 
     override fun init() {
-        categories["1"] = Category("1", "Food")
-        categories["2"] = Category("2", "Electronic")
-        categories["3"] = Category("3", "Book")
+        categories["2"] = Category("2", "Food")
+        categories["3"] = Category("3", "Electronic")
+        categories["4"] = Category("4", "Book")
 
-        items["1"] = Item("1", "Spicy Bread", "1")
-        items["2"] = Item("2", "HDMI cable", "2")
-        items["3"] = Item("3", "Isaac Asimov: Foundation Empire", "3")
+        items["1"] = Item("1", "Spicy Bread", "2")
+        items["2"] = Item("2", "DisplayPort cable", "3")
+        items["3"] = Item("3", "Isaac Asimov: Foundation Empire", "4")
     }
 
     override fun getCategory(id: String): Category {
@@ -51,14 +52,17 @@ class MemoryRepository : Repository() {
         try {
             lock.writeLock().lock()
 
-            if (categories.containsKey(category.id)) {
+            if (category.id != null && categories.containsKey(category.id)) {
                 categoryChildrenListeners[category.parentId]?.forEach { it.onChanged(category) }
                 categoryListeners[category.id]?.forEach { it.onChanged(category) }
+                categories[category.id] = category
             } else {
-                categoryChildrenListeners[category.parentId]?.forEach { it.onAdded(category) }
+                val newCategory =
+                    if (category.id != null) category
+                    else category.copy(id = UUID.randomUUID().toString())
+                categoryChildrenListeners[newCategory.parentId]?.forEach { it.onAdded(newCategory) }
+                categories[newCategory.id!!] = newCategory
             }
-
-            categories[category.id] = category
         } finally {
             lock.writeLock().unlock()
         }
@@ -104,16 +108,19 @@ class MemoryRepository : Repository() {
         try {
             lock.writeLock().lock()
 
-            if (items.containsKey(item.id)) {
+            if (item.id != null && categories.containsKey(item.id)) {
                 itemChildrenListeners[item.parentId]?.forEach { it.onAdded(item) }
                 itemsOfCategoryListeners[item.categoryId]?.forEach { it.onAdded(item) }
                 itemListeners[item.id]?.forEach { it.onChanged(item) }
+                items[item.id] = item
             } else {
-                itemChildrenListeners[item.parentId]?.forEach { it.onChanged(item) }
-                itemsOfCategoryListeners[item.categoryId]?.forEach { it.onChanged(item) }
+                val newItem =
+                    if (item.id != null) item
+                    else item.copy(id = UUID.randomUUID().toString())
+                itemChildrenListeners[newItem.parentId]?.forEach { it.onChanged(newItem) }
+                itemsOfCategoryListeners[newItem.categoryId]?.forEach { it.onChanged(newItem) }
+                items[newItem.id!!] = newItem
             }
-
-            items[item.id] = item
         } finally {
             lock.writeLock().unlock()
         }

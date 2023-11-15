@@ -47,33 +47,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         //seedDatabase()
-
-        database.getReference("categories").addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val category = snapshot.getValue<Category>()
-                Log.d(TAG, "Category added: $category")
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                val category = snapshot.getValue<Category>()
-                Log.d(TAG, "Category changed: $category")
-            }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                val category = snapshot.getValue<Category>()
-                Log.d(TAG, "Category removed: $category")
-            }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                val category = snapshot.getValue<Category>()
-                Log.d(TAG, "Category moved: $category")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w(TAG, "Cancelled", error.toException())
-            }
-
-        })
+        listenToChanges()
     }
 
     private fun seedDatabase() {
@@ -138,6 +112,34 @@ class MainActivity : AppCompatActivity() {
                 Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
+    }
 
+    private fun listenToChanges() {
+        database.getReference("categories").addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val category = snapshot.getValue<Category>()
+                Log.d(TAG, "Category added: $category")
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                val category = snapshot.getValue<Category>()
+                Log.d(TAG, "Category changed: $category")
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                val category = snapshot.getValue<Category>()
+                Log.d(TAG, "Category removed: $category")
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                val category = snapshot.getValue<Category>()
+                Log.d(TAG, "Category moved: $category")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(TAG, "Cancelled", error.toException())
+            }
+
+        })
     }
 }
