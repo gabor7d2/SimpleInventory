@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.FragmentItemDetailsMainBinding
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.persistence.EntityListener
@@ -46,6 +47,12 @@ class ItemDetailsMainFragment(private val itemId: String) : Fragment(), EntityLi
 
         binding.textViewCategory.text =
             RepositoryManager.instance.getCategory(entity.categoryId).name
+
+        binding.openParentDetailsButton.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("itemId", entity.parentId)
+            findNavController().navigate(R.id.itemDetailsFragment, bundle)
+        }
     }
 
     override fun onRemoved(entity: Item) {

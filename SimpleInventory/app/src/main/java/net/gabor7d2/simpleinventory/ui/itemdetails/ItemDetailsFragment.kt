@@ -22,14 +22,11 @@ class ItemDetailsFragment : Fragment() {
         _binding = FragmentTabbedBinding.inflate(inflater, container, false)
 
         val itemId = arguments?.getString("itemId") ?: throw IllegalArgumentException("Missing itemId argument")
-        binding.viewPager.adapter = ItemDetailsPagerAdapter(this, itemId)
+        val adapter = ItemDetailsPagerAdapter(this, itemId)
+        binding.viewPager.adapter = adapter
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = when(position){
-                0 -> "Details"
-                1 -> "Sub-items"
-                else -> throw IllegalArgumentException("Invalid position: $position")
-            }
+            tab.text = adapter.getPageTitle(position)
         }.attach()
 
         return binding.root

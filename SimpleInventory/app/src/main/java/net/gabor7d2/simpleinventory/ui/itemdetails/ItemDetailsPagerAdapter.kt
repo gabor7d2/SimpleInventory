@@ -8,6 +8,12 @@ class ItemDetailsPagerAdapter(fragment: Fragment, private val itemId: String) : 
 
     override fun getItemCount(): Int = 2
 
+    fun getPageTitle(position: Int): String = when(position){
+        0 -> "Details"
+        1 -> "Sub-items"
+        else -> throw IllegalArgumentException("Invalid position: $position")
+    }
+
     override fun createFragment(position: Int): Fragment = when(position){
         0 -> ItemDetailsMainFragment(itemId)
         1 -> ItemsFragment(itemId)
