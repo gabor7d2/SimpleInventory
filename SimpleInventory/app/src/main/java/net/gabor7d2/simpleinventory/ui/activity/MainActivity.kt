@@ -4,8 +4,14 @@ import android.os.Bundle
 import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavAction
+import androidx.navigation.NavActionBuilder
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.database.ChildEventListener
@@ -18,10 +24,13 @@ import com.google.firebase.ktx.Firebase
 import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.ActivityMainBinding
 import net.gabor7d2.simpleinventory.model.Category
+import net.gabor7d2.simpleinventory.ui.ListItemInteractListener
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var navController: NavController
 
     private val TAG = "MainActivity"
 
@@ -35,19 +44,32 @@ class MainActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_categories, R.id.navigation_home, R.id.navigation_items
+                R.id.categoriesFragment, R.id.homeFragment, R.id.itemsFragment
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+
+        navView.selectedItemId = R.id.homeFragment
+
+        navView.setOnItemSelectedListener { item ->
+            navController.popBackStack(R.id.homeFragment, inclusive = false)
+            if (item.itemId != R.id.homeFragment) {
+                navController.navigate(item.itemId)
+            }
+            true
+        }
 
         //seedDatabase()
         listenToChanges()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()
     }
 
     private fun seedDatabase() {

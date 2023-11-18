@@ -3,24 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/homeFragment">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/homeFragment"
         android:name="net.gabor7d2.simpleinventory.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_categories"
+        android:id="@+id/categoriesFragment"
         android:name="net.gabor7d2.simpleinventory.ui.category.CategoriesFragment"
         android:label="@string/title_categories"
         tools:layout="@layout/fragment_categories" />
 
     <fragment
-        android:id="@+id/navigation_items"
+        android:id="@+id/itemsFragment"
         android:name="net.gabor7d2.simpleinventory.ui.item.ItemsFragment"
         android:label="@string/title_items"
-        tools:layout="@layout/fragment_items" />
+        tools:layout="@layout/fragment_items" >
+        <action
+            android:id="@+id/action_itemsFragment_to_itemDetailsFragment"
+            app:destination="@id/itemDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemDetailsFragment"
+        android:name="net.gabor7d2.simpleinventory.ui.itemdetails.ItemDetailsFragment"
+        android:label="ItemDetailsFragment"
+        tools:layout="@layout/fragment_item_details">
+        <argument
+            android:name="itemId"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

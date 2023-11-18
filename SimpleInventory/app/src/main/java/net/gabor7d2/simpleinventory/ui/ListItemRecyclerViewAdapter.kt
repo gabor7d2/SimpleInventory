@@ -3,6 +3,7 @@ package net.gabor7d2.simpleinventory.ui
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.NavController
 import net.gabor7d2.simpleinventory.databinding.ListItemCategoryBinding
 import net.gabor7d2.simpleinventory.databinding.ListItemItemBinding
 import net.gabor7d2.simpleinventory.persistence.CollectionListener
@@ -12,8 +13,9 @@ import net.gabor7d2.simpleinventory.model.ListItem
 import net.gabor7d2.simpleinventory.ui.category.CategoryViewHolder
 import net.gabor7d2.simpleinventory.ui.item.ItemViewHolder
 
-class ListItemRecyclerViewAdapter<T : ListItem>
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
+class ListItemRecyclerViewAdapter<T : ListItem>(
+    private val navController: NavController
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     CollectionListener<T> {
 
     private val values: MutableList<T> = mutableListOf()
@@ -38,7 +40,7 @@ class ListItemRecyclerViewAdapter<T : ListItem>
                     LayoutInflater.from(parent.context),
                     parent,
                     false
-                )
+                ), navController
             )
             else -> throw IllegalArgumentException("Unknown viewType: $viewType")
         }

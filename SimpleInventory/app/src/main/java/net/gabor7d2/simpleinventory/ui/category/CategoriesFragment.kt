@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import net.gabor7d2.simpleinventory.databinding.FragmentCategoriesBinding
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.model.Category
@@ -24,7 +25,7 @@ class CategoriesFragment : Fragment() {
     ): View {
         _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
 
-        val adapter = ListItemRecyclerViewAdapter<Category>()
+        val adapter = ListItemRecyclerViewAdapter<Category>(findNavController())
         RepositoryManager.instance.addCategoryChildrenListener(null, adapter)
 
         with(binding.list) {

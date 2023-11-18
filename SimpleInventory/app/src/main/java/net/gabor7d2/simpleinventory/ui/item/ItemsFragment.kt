@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import net.gabor7d2.simpleinventory.databinding.FragmentItemsBinding
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.model.Item
@@ -24,7 +25,7 @@ class ItemsFragment : Fragment() {
     ): View {
         _binding = FragmentItemsBinding.inflate(inflater, container, false)
 
-        val adapter = ListItemRecyclerViewAdapter<Item>()
+        val adapter = ListItemRecyclerViewAdapter<Item>(findNavController())
         RepositoryManager.instance.addItemChildrenListener(null, adapter)
 
         with(binding.list) {
