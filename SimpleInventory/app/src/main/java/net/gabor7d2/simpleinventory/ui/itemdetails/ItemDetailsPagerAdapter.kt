@@ -15,7 +15,7 @@ class ItemDetailsPagerAdapter(fragment: Fragment, private val itemId: String) : 
     }
 
     override fun createFragment(position: Int): Fragment = when(position){
-        0 -> ItemDetailsMainFragment(itemId)
+        0 -> ItemDetailsFragment(itemId)
         1 -> ItemsFragment(itemId)
         else -> throw IllegalArgumentException("Invalid position: $position")
     }

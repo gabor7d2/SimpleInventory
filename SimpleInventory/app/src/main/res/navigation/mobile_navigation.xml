@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/itemDetailsFragment"
-        android:name="net.gabor7d2.simpleinventory.ui.itemdetails.ItemDetailsFragment"
+        android:name="net.gabor7d2.simpleinventory.ui.itemdetails.ItemDetailsTabbedFragment"
         android:label="ItemDetailsFragment" >
         <action
             android:id="@+id/action_itemDetailsFragment_to_itemDetailsFragment"

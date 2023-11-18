@@ -5,12 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.tabs.TabLayoutMediator
-import net.gabor7d2.simpleinventory.databinding.FragmentTabbedBinding
+import androidx.navigation.fragment.findNavController
+import net.gabor7d2.simpleinventory.R
+import net.gabor7d2.simpleinventory.databinding.FragmentItemDetailsBinding
+import net.gabor7d2.simpleinventory.model.Item
+import net.gabor7d2.simpleinventory.persistence.EntityListener
+import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 
-class ItemDetailsFragment : Fragment() {
+class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListener<Item> {
 
-    private var _binding: FragmentTabbedBinding? = null
+    private var _binding: FragmentItemDetailsBinding? = null
 
     private val binding get() = _binding!!
 
@@ -19,16 +23,40 @@ class ItemDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentTabbedBinding.inflate(inflater, container, false)
-
-        val itemId = arguments?.getString("itemId") ?: throw IllegalArgumentException("Missing itemId argument")
-        val adapter = ItemDetailsPagerAdapter(this, itemId)
-        binding.viewPager.adapter = adapter
-
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = adapter.getPageTitle(position)
-        }.attach()
-
+        _binding = FragmentItemDetailsBinding.inflate(inflater, container, false)
+        RepositoryManager.instance.addItemListener(itemId, this)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        RepositoryManager.instance.removeItemListener(this)
+        _binding = null
+    }
+
+    override fun onChanged(entity: Item) {
+        binding.textViewName.text = entity.name
+
+        val parent =
+            if (entity.parentId == null) "(No parent)"
+            else RepositoryManager.instance.getItem(entity.parentId).name
+        binding.textViewParent.text = parent
+
+        binding.openParentDetailsButton.visibility =
+            if (entity.parentId == null) View.GONE else View.VISIBLE
+
+        binding.textViewCategory.text =
+            RepositoryManager.instance.getCategory(entity.categoryId).name
+
+        binding.openParentDetailsButton.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("itemId", entity.parentId)
+            findNavController().navigate(R.id.itemDetailsFragment, bundle)
+        }
+    }
+
+    override fun onRemoved(entity: Item) {
+        // TODO test
+        findNavController().popBackStack()
     }
 }
