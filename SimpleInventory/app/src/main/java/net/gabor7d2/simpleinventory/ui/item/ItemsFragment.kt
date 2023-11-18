@@ -33,6 +33,7 @@ class ItemsFragment(private val itemId: String? = null) : Fragment() {
             val newItem = RepositoryManager.instance.addOrUpdateItem(Item(null, "New Item", null))
             val bundle = Bundle()
             bundle.putString("itemId", newItem.id)
+            bundle.putString("title", newItem.name)
             findNavController().navigate(R.id.itemDetailsFragment, bundle)
         }
 

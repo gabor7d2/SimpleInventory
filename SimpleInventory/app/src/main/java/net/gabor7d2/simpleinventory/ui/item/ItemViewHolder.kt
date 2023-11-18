@@ -32,6 +32,7 @@ class ItemViewHolder(
         binding.root.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("itemId", item.id)
+            bundle.putString("title", item.name)
             navController.navigate(R.id.itemDetailsFragment, bundle)
         }
     }

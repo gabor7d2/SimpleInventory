@@ -29,7 +29,10 @@
     <fragment
         android:id="@+id/itemDetailsFragment"
         android:name="net.gabor7d2.simpleinventory.ui.itemdetails.ItemDetailsTabbedFragment"
-        android:label="ItemDetailsFragment" >
+        android:label="{title}" >
+        <argument
+            android:name="title"
+            app:argType="string" />
         <action
             android:id="@+id/action_itemDetailsFragment_to_itemDetailsFragment"
             app:destination="@id/itemDetailsFragment" />

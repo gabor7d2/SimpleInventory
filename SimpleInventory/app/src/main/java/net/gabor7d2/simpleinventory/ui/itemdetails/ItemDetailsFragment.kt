@@ -42,7 +42,6 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
 
     override fun onChanged(entity: Item) {
         binding.textViewName.text = entity.name
-        activity?.actionBar?.title = entity.name
 
 
         val parent =
@@ -56,6 +55,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
         binding.openParentDetailsButton.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("itemId", entity.parentId)
+            bundle.putString("title", parent)
             findNavController().navigate(R.id.itemDetailsFragment, bundle)
         }
 
