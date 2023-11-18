@@ -55,7 +55,14 @@ class MemoryRepository : Repository() {
             lock.writeLock().lock()
 
             if (category.id != null && categories.containsKey(category.id)) {
-                categoryChildrenListeners[category.parentId]?.forEach { it.onChanged(category) }
+                val oldParentId = categories[category.id]!!.parentId
+                if (oldParentId != category.parentId) {
+                    categoryChildrenListeners[oldParentId]?.forEach { it.onRemoved(category) }
+                    categoryChildrenListeners[category.parentId]?.forEach { it.onAdded(category) }
+                } else {
+                    categoryChildrenListeners[category.parentId]?.forEach { it.onChanged(category) }
+                }
+
                 categoryListeners[category.id]?.forEach { it.onChanged(category) }
                 categories[category.id] = category
             } else {
@@ -79,9 +86,16 @@ class MemoryRepository : Repository() {
                 categoryChildrenListeners[category.parentId]?.forEach { it.onRemoved(category) }
                 categoryListeners[id]?.forEach { it.onRemoved(category) }
                 categories.remove(id)
-            }
 
-            categories.remove(id)
+                for (item in getItemsOfCategory(id)) {
+                    removeItem(item.id!!)
+                }
+
+                for (child in getChildrenOfCategory(id)) {
+                    val newCategory = child.copy(parentId = null)
+                    addOrUpdateCategory(newCategory)
+                }
+            }
         } finally {
             lock.writeLock().unlock()
         }
@@ -110,17 +124,31 @@ class MemoryRepository : Repository() {
         try {
             lock.writeLock().lock()
 
-            if (item.id != null && categories.containsKey(item.id)) {
-                itemChildrenListeners[item.parentId]?.forEach { it.onAdded(item) }
-                itemsOfCategoryListeners[item.categoryId]?.forEach { it.onAdded(item) }
+            if (item.id != null && items.containsKey(item.id)) {
+                val oldParentId = items[item.id]!!.parentId
+                if (oldParentId != item.parentId) {
+                    itemChildrenListeners[oldParentId]?.forEach { it.onRemoved(item) }
+                    itemChildrenListeners[item.parentId]?.forEach { it.onAdded(item) }
+                } else {
+                    itemChildrenListeners[item.parentId]?.forEach { it.onChanged(item) }
+                }
+
+                val oldCategoryId = items[item.id]!!.categoryId
+                if (oldCategoryId != item.categoryId) {
+                    itemsOfCategoryListeners[oldCategoryId]?.forEach { it.onRemoved(item) }
+                    itemsOfCategoryListeners[item.categoryId]?.forEach { it.onAdded(item) }
+                } else {
+                    itemsOfCategoryListeners[item.categoryId]?.forEach { it.onChanged(item) }
+                }
+
                 itemListeners[item.id]?.forEach { it.onChanged(item) }
                 items[item.id] = item
             } else {
                 val newItem =
                     if (item.id != null) item
                     else item.copy(id = UUID.randomUUID().toString())
-                itemChildrenListeners[newItem.parentId]?.forEach { it.onChanged(newItem) }
-                itemsOfCategoryListeners[newItem.categoryId]?.forEach { it.onChanged(newItem) }
+                itemChildrenListeners[newItem.parentId]?.forEach { it.onAdded(newItem) }
+                itemsOfCategoryListeners[newItem.categoryId]?.forEach { it.onAdded(newItem) }
                 items[newItem.id!!] = newItem
             }
         } finally {
@@ -138,6 +166,11 @@ class MemoryRepository : Repository() {
                 itemsOfCategoryListeners[item.categoryId]?.forEach { it.onRemoved(item) }
                 itemListeners[id]?.forEach { it.onRemoved(item) }
                 items.remove(id)
+
+                for (child in getChildrenOfItem(id)) {
+                    val newItem = child.copy(parentId = null)
+                    addOrUpdateItem(newItem)
+                }
             }
         } finally {
             lock.writeLock().unlock()
