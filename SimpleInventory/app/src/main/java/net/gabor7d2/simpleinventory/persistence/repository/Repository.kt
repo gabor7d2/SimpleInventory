@@ -118,7 +118,7 @@ abstract class Repository {
 
     abstract fun getItemsOfCategory(id: String): List<Item>
 
-    abstract fun addOrUpdateCategory(category: Category)
+    abstract fun addOrUpdateCategory(category: Category): Category
 
     abstract fun removeCategory(id: String)
 
@@ -128,7 +128,7 @@ abstract class Repository {
     // returns root items if id is null
     abstract fun getChildrenOfItem(id: String?): List<Item>
 
-    abstract fun addOrUpdateItem(item: Item)
+    abstract fun addOrUpdateItem(item: Item): Item
 
     abstract fun removeItem(id: String)
 }

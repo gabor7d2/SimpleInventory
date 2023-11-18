@@ -9,8 +9,6 @@ class MemoryRepository : Repository() {
     private val categories: MutableMap<String, Category> = mutableMapOf()
     private val items: MutableMap<String, Item> = mutableMapOf()
 
-    // TODO create DbItem and DbCategory classes, generate ids
-
     override fun init() {
         categories["2"] = Category("2", "Food")
         categories["3"] = Category("3", "Electronic")
@@ -50,7 +48,7 @@ class MemoryRepository : Repository() {
         }
     }
 
-    override fun addOrUpdateCategory(category: Category) {
+    override fun addOrUpdateCategory(category: Category): Category {
         try {
             lock.writeLock().lock()
 
@@ -65,12 +63,14 @@ class MemoryRepository : Repository() {
 
                 categoryListeners[category.id]?.forEach { it.onChanged(category) }
                 categories[category.id] = category
+                return category
             } else {
                 val newCategory =
                     if (category.id != null) category
                     else category.copy(id = UUID.randomUUID().toString())
                 categoryChildrenListeners[newCategory.parentId]?.forEach { it.onAdded(newCategory) }
                 categories[newCategory.id!!] = newCategory
+                return newCategory
             }
         } finally {
             lock.writeLock().unlock()
@@ -120,7 +120,7 @@ class MemoryRepository : Repository() {
         }
     }
 
-    override fun addOrUpdateItem(item: Item) {
+    override fun addOrUpdateItem(item: Item): Item {
         try {
             lock.writeLock().lock()
 
@@ -143,6 +143,7 @@ class MemoryRepository : Repository() {
 
                 itemListeners[item.id]?.forEach { it.onChanged(item) }
                 items[item.id] = item
+                return item
             } else {
                 val newItem =
                     if (item.id != null) item
@@ -150,6 +151,7 @@ class MemoryRepository : Repository() {
                 itemChildrenListeners[newItem.parentId]?.forEach { it.onAdded(newItem) }
                 itemsOfCategoryListeners[newItem.categoryId]?.forEach { it.onAdded(newItem) }
                 items[newItem.id!!] = newItem
+                return newItem
             }
         } finally {
             lock.writeLock().unlock()

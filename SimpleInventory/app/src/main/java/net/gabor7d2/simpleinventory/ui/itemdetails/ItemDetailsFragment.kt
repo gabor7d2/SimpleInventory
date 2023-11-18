@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.FragmentItemDetailsBinding
@@ -36,6 +37,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
 
     override fun onChanged(entity: Item) {
         binding.textViewName.text = entity.name
+        activity?.actionBar?.title = entity.name
 
         val parent =
             if (entity.parentId == null) "(No parent)"
@@ -45,8 +47,13 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
         binding.openParentDetailsButton.visibility =
             if (entity.parentId == null) View.GONE else View.VISIBLE
 
-        binding.textViewCategory.text =
-            RepositoryManager.instance.getCategory(entity.categoryId).name
+        val category =
+            if (entity.categoryId == null) "(No category)"
+            else RepositoryManager.instance.getCategory(entity.categoryId).name
+        binding.textViewCategory.text = category
+
+        binding.openCategoryDetailsButton.visibility =
+            if (entity.categoryId == null) View.GONE else View.VISIBLE
 
         binding.openParentDetailsButton.setOnClickListener {
             val bundle = Bundle()
@@ -57,6 +64,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
 
     override fun onRemoved(entity: Item) {
         // TODO test
+        Toast.makeText(context, "Item has been deleted", Toast.LENGTH_LONG).show()
         findNavController().popBackStack()
     }
 }
