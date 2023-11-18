@@ -1,4 +1,4 @@
-package net.gabor7d2.simpleinventory.db.repository
+package net.gabor7d2.simpleinventory.persistence.repository
 
 import net.gabor7d2.simpleinventory.model.Category
 import net.gabor7d2.simpleinventory.model.Item

@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import net.gabor7d2.simpleinventory.Preferences
+import net.gabor7d2.simpleinventory.persistence.Preferences
 import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.ActivityLoginBinding
 

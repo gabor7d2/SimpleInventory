@@ -1,7 +1,7 @@
-package net.gabor7d2.simpleinventory.db.repository
+package net.gabor7d2.simpleinventory.persistence.repository
 
-import net.gabor7d2.simpleinventory.db.CollectionListener
-import net.gabor7d2.simpleinventory.db.EntityListener
+import net.gabor7d2.simpleinventory.persistence.CollectionListener
+import net.gabor7d2.simpleinventory.persistence.EntityListener
 import net.gabor7d2.simpleinventory.model.Category
 import net.gabor7d2.simpleinventory.model.Item
 import java.util.concurrent.locks.ReentrantReadWriteLock

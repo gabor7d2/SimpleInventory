@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import net.gabor7d2.simpleinventory.databinding.ListItemCategoryBinding
 import net.gabor7d2.simpleinventory.databinding.ListItemItemBinding
-import net.gabor7d2.simpleinventory.db.CollectionListener
+import net.gabor7d2.simpleinventory.persistence.CollectionListener
 import net.gabor7d2.simpleinventory.model.Category
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.model.ListItem
@@ -13,7 +13,7 @@ import net.gabor7d2.simpleinventory.ui.category.CategoryViewHolder
 import net.gabor7d2.simpleinventory.ui.item.ItemViewHolder
 
 class ListItemRecyclerViewAdapter<T : ListItem>
-    : RecyclerView.Adapter<ViewHolder>(),
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     CollectionListener<T> {
 
     private val values: MutableList<T> = mutableListOf()
@@ -24,7 +24,7 @@ class ListItemRecyclerViewAdapter<T : ListItem>
         return values[position].listItemType
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
             ListItem.TYPE_CATEGORY -> return CategoryViewHolder(
                     ListItemCategoryBinding.inflate(
@@ -44,7 +44,7 @@ class ListItemRecyclerViewAdapter<T : ListItem>
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = values[position]
         when (holder) {
             is CategoryViewHolder -> holder.bind(item as Category)

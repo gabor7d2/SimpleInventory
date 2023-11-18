@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import net.gabor7d2.simpleinventory.databinding.FragmentCategoriesBinding
-import net.gabor7d2.simpleinventory.db.repository.RepositoryManager
+import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.model.Category
 import net.gabor7d2.simpleinventory.ui.ListItemRecyclerViewAdapter
 

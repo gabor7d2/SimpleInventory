@@ -1,4 +1,4 @@
-package net.gabor7d2.simpleinventory
+package net.gabor7d2.simpleinventory.persistence
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE

@@ -1,4 +1,4 @@
-package net.gabor7d2.simpleinventory.db
+package net.gabor7d2.simpleinventory.persistence
 
 interface CollectionListener<T> {
 
