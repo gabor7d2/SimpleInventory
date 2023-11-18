@@ -17,11 +17,18 @@ class ItemViewHolder(
         if (item.id == null) {
             throw IllegalArgumentException("Item id cannot be null")
         }
-        binding.itemNumber.text = item.id
-        binding.content.text = item.name
-        binding.deleteButton.setOnClickListener {
+
+        binding.textViewName.text = item.name
+
+        val category =
+            if (item.categoryId == null) ""
+            else RepositoryManager.instance.getCategory(item.categoryId).name
+        binding.textViewCategory.text = category
+
+        binding.buttonDelete.setOnClickListener {
             RepositoryManager.instance.removeItem(item.id)
         }
+
         binding.root.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("itemId", item.id)

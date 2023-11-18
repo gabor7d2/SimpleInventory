@@ -113,6 +113,8 @@ abstract class Repository {
 
     abstract fun getCategory(id: String): Category
 
+    abstract fun searchCategories(name: String): List<Category>
+
     // returns root categories if id is null
     abstract fun getChildrenOfCategory(id: String?): List<Category>
 
@@ -124,6 +126,8 @@ abstract class Repository {
 
 
     abstract fun getItem(id: String): Item
+
+    abstract fun searchItems(name: String): List<Item>
 
     // returns root items if id is null
     abstract fun getChildrenOfItem(id: String?): List<Item>

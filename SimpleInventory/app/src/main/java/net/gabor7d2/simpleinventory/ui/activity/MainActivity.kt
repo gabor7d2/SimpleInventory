@@ -4,16 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavAction
-import androidx.navigation.NavActionBuilder
 import androidx.navigation.NavController
-import androidx.navigation.NavDirections
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -24,7 +18,6 @@ import com.google.firebase.ktx.Firebase
 import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.ActivityMainBinding
 import net.gabor7d2.simpleinventory.model.Category
-import net.gabor7d2.simpleinventory.ui.ListItemInteractListener
 
 class MainActivity : AppCompatActivity() {
 

@@ -20,11 +20,9 @@ class ListItemRecyclerViewAdapter<T : ListItem>(
 
     private val values: MutableList<T> = mutableListOf()
 
-    override fun getItemCount(): Int = values.size
+    override fun getItemCount() = values.size
 
-    override fun getItemViewType(position: Int): Int {
-        return values[position].listItemType
-    }
+    override fun getItemViewType(position: Int) = values[position].listItemType
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {

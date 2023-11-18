@@ -2,7 +2,6 @@ package net.gabor7d2.simpleinventory.ui.category
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,11 +26,7 @@ class CategoriesFragment : Fragment() {
 
         val adapter = ListItemRecyclerViewAdapter<Category>(findNavController())
         RepositoryManager.instance.addCategoryChildrenListener(null, adapter)
-
-        with(binding.list) {
-            layoutManager = LinearLayoutManager(context)
-            this.adapter = adapter
-        }
+        binding.list.adapter = adapter
 
         return binding.root
     }

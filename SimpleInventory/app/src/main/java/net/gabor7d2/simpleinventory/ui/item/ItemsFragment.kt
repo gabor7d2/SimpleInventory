@@ -2,7 +2,6 @@ package net.gabor7d2.simpleinventory.ui.item
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,11 +27,7 @@ class ItemsFragment(private val itemId: String? = null) : Fragment() {
 
         val adapter = ListItemRecyclerViewAdapter<Item>(findNavController())
         RepositoryManager.instance.addItemChildrenListener(itemId, adapter)
-
-        with(binding.list) {
-            layoutManager = LinearLayoutManager(context)
-            this.adapter = adapter
-        }
+        binding.list.adapter = adapter
 
         binding.fab.setOnClickListener {
             val newItem = RepositoryManager.instance.addOrUpdateItem(Item(null, "New Item", null))

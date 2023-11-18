@@ -21,6 +21,8 @@ class ItemDetailsTabbedFragment : Fragment() {
     ): View {
         _binding = FragmentTabbedBinding.inflate(inflater, container, false)
 
+        activity?.actionBar?.title = "TEST"
+
         val itemId = arguments?.getString("itemId") ?: throw IllegalArgumentException("Missing itemId argument")
         val adapter = ItemDetailsPagerAdapter(this, itemId)
         binding.viewPager.adapter = adapter

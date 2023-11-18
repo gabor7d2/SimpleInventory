@@ -30,6 +30,10 @@ class MemoryRepository : Repository() {
         }
     }
 
+    override fun searchCategories(name: String): List<Category> {
+        return categories.values.filter { it.name.contains(name, ignoreCase = true) }
+    }
+
     override fun getChildrenOfCategory(id: String?): List<Category> {
         try {
             lock.readLock().lock()
@@ -109,6 +113,10 @@ class MemoryRepository : Repository() {
         } finally {
             lock.readLock().unlock()
         }
+    }
+
+    override fun searchItems(name: String): List<Item> {
+        return items.values.filter { it.name.contains(name, ignoreCase = true) }
     }
 
     override fun getChildrenOfItem(id: String?): List<Item> {

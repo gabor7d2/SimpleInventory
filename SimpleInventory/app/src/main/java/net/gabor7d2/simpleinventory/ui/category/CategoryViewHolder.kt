@@ -11,9 +11,10 @@ class CategoryViewHolder(private val binding: ListItemCategoryBinding) : Recycle
         if (category.id == null) {
             throw IllegalArgumentException("Category id cannot be null")
         }
-        binding.itemNumber.text = category.id
-        binding.content.text = category.name
-        binding.deleteButton.setOnClickListener {
+
+        binding.textViewName.text = category.name
+
+        binding.buttonDelete.setOnClickListener {
             RepositoryManager.instance.removeCategory(category.id)
         }
     }
