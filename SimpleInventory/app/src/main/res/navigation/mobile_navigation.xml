@@ -29,11 +29,11 @@
     <fragment
         android:id="@+id/itemDetailsFragment"
         android:name="net.gabor7d2.simpleinventory.ui.itemdetails.ItemDetailsFragment"
-        android:label="ItemDetailsFragment"
-        tools:layout="@layout/fragment_item_details">
-        <argument
-            android:name="itemId"
-            app:argType="string" />
+        android:label="ItemDetailsFragment" >
+        <action
+            android:id="@+id/action_itemDetailsFragment_to_itemDetailsFragment"
+            app:destination="@id/itemDetailsFragment" />
     </fragment>
+
 
 </navigation>

@@ -25,7 +25,7 @@ class ItemViewHolder(
         binding.root.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("itemId", item.id)
-            navController.navigate(R.id.action_itemsFragment_to_itemDetailsFragment, bundle)
+            navController.navigate(R.id.itemDetailsFragment, bundle)
         }
     }
 }

@@ -15,10 +15,12 @@ class MemoryRepository : Repository() {
         categories["2"] = Category("2", "Food")
         categories["3"] = Category("3", "Electronic")
         categories["4"] = Category("4", "Book")
+        categories["5"] = Category("5", "Boxes")
 
-        items["1"] = Item("1", "Spicy Bread", "2")
+        items["1"] = Item("1", "Spicy Bread", "2", "4")
         items["2"] = Item("2", "DisplayPort cable", "3")
-        items["3"] = Item("3", "Isaac Asimov: Foundation Empire", "4")
+        items["3"] = Item("3", "Isaac Asimov: Foundation Empire", "4", "4")
+        items["4"] = Item("4", "Box #1", "5")
     }
 
     override fun getCategory(id: String): Category {

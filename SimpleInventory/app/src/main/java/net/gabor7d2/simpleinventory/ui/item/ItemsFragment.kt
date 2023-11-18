@@ -12,7 +12,7 @@ import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.ui.ListItemRecyclerViewAdapter
 
-class ItemsFragment : Fragment() {
+class ItemsFragment(private val itemId: String? = null) : Fragment() {
 
     private var _binding: FragmentItemsBinding? = null
 
@@ -26,7 +26,7 @@ class ItemsFragment : Fragment() {
         _binding = FragmentItemsBinding.inflate(inflater, container, false)
 
         val adapter = ListItemRecyclerViewAdapter<Item>(findNavController())
-        RepositoryManager.instance.addItemChildrenListener(null, adapter)
+        RepositoryManager.instance.addItemChildrenListener(itemId, adapter)
 
         with(binding.list) {
             layoutManager = LinearLayoutManager(context)
@@ -38,6 +38,7 @@ class ItemsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
         _binding = null
     }
 }
