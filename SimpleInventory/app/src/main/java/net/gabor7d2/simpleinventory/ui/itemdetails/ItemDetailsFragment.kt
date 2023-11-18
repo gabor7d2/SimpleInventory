@@ -1,17 +1,15 @@
 package net.gabor7d2.simpleinventory.ui.itemdetails
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
-import net.gabor7d2.simpleinventory.R
+import net.gabor7d2.simpleinventory.MobileNavigationDirections
 import net.gabor7d2.simpleinventory.databinding.FragmentItemDetailsBinding
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.persistence.EntityListener
@@ -49,14 +47,14 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
             else RepositoryManager.instance.getItem(entity.parentId).name
         binding.textViewParent.text = parent
 
-        binding.openParentDetailsButton.visibility =
-            if (entity.parentId == null) View.GONE else View.VISIBLE
+        binding.openParentDetailsButton.visibility = if (entity.parentId == null) View.GONE else View.VISIBLE
 
-        binding.openParentDetailsButton.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("itemId", entity.parentId)
-            bundle.putString("title", parent)
-            findNavController().navigate(R.id.itemDetailsFragment, bundle)
+        if (entity.parentId != null) {
+            binding.openParentDetailsButton.setOnClickListener {
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGotoItemDetailsFragment(parent, entity.parentId)
+                )
+            }
         }
 
         binding.editParentButton.setOnClickListener {
@@ -75,8 +73,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
             else RepositoryManager.instance.getCategory(entity.categoryId).name
         binding.textViewCategory.text = category
 
-        binding.openCategoryDetailsButton.visibility =
-            if (entity.categoryId == null) View.GONE else View.VISIBLE
+        binding.openCategoryDetailsButton.visibility = if (entity.categoryId == null) View.GONE else View.VISIBLE
     }
 
     override fun onRemoved(entity: Item) {

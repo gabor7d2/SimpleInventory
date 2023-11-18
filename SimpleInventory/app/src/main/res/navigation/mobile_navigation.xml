@@ -5,6 +5,10 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/homeFragment">
 
+    <action
+        android:id="@+id/action_goto_itemDetailsFragment"
+        app:destination="@id/itemDetailsFragment" />
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="net.gabor7d2.simpleinventory.ui.home.HomeFragment"
@@ -22,9 +26,6 @@
         android:name="net.gabor7d2.simpleinventory.ui.item.ItemsFragment"
         android:label="@string/title_items"
         tools:layout="@layout/fragment_items" >
-        <action
-            android:id="@+id/action_itemsFragment_to_itemDetailsFragment"
-            app:destination="@id/itemDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/itemDetailsFragment"
@@ -33,9 +34,9 @@
         <argument
             android:name="title"
             app:argType="string" />
-        <action
-            android:id="@+id/action_itemDetailsFragment_to_itemDetailsFragment"
-            app:destination="@id/itemDetailsFragment" />
+        <argument
+            android:name="itemId"
+            app:argType="string" />
     </fragment>
 
 
