@@ -10,6 +10,7 @@ import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
+import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.FragmentItemDetailsBinding
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.persistence.EntityListener
@@ -44,7 +45,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
         binding.textViewName.text = entity.name
 
         binding.editNameButton.setOnClickListener {
-            val dialog = EditTextDialog("Edit name", prefill = entity.name)
+            val dialog = EditTextDialog(getString(R.string.edit_name), prefill = entity.name)
             clearFragmentResultListener("editTextResult")
             setFragmentResultListener("editTextResult") { _, result ->
                 val text = result.getString("text")!!
@@ -56,7 +57,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
 
 
         val parent =
-            if (entity.parentId == null) "(No parent)"
+            if (entity.parentId == null) getString(R.string.no_parent)
             else RepositoryManager.instance.getItem(entity.parentId).name
         binding.textViewParent.text = parent
 
@@ -83,7 +84,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
 
 
         val category =
-            if (entity.categoryId == null) "(No category)"
+            if (entity.categoryId == null) getString(R.string.no_category)
             else RepositoryManager.instance.getCategory(entity.categoryId).name
         binding.textViewCategory.text = category
 
@@ -111,7 +112,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
 
     override fun onRemoved(entity: Item) {
         // TODO test
-        Toast.makeText(context, "Item has been deleted", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, getString(R.string.item_has_been_deleted), Toast.LENGTH_LONG).show()
         findNavController().popBackStack()
     }
 }

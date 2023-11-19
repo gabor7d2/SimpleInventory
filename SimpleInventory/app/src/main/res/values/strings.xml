@@ -13,4 +13,16 @@
     <string name="title_items">Items</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_category">New Category</string>
+    <string name="search_categories">Search categories...</string>
+    <string name="edit_name">Edit name</string>
+    <string name="no_parent">(No parent)</string>
+    <string name="category_has_been_deleted">Category has been deleted</string>
+    <string name="pick_a_category">Pick a category</string>
+    <string name="search_items">Search items...</string>
+    <string name="pick_an_item">Pick an item</string>
+    <string name="search_globally">Search globally...</string>
+    <string name="new_item">New Item</string>
+    <string name="no_category">(No category)</string>
+    <string name="item_has_been_deleted">Item has been deleted</string>
 </resources>

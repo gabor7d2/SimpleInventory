@@ -90,6 +90,3 @@ DP kábel
 - Fragmentek
 - RecyclerView
 - Perzisztens adattárolás: Firebase
-
-
-# Házi feladat dokumentáció (ha nincs, ez a fejezet törölhető)

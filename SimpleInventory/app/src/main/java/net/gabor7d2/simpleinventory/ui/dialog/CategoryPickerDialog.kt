@@ -6,6 +6,7 @@ import android.view.WindowManager
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.DialogPickerBinding
 
 class CategoryPickerDialog : DialogFragment() {
@@ -24,14 +25,14 @@ class CategoryPickerDialog : DialogFragment() {
             }
 
             binding.list.adapter = adapter
-            binding.editTextSearch.hint = "Search categories..."
+            binding.editTextSearch.hint = getString(R.string.search_categories)
             binding.editTextSearch.requestFocus()
             binding.editTextSearch.doOnTextChanged { text, _, _, _ ->
                 adapter.doSearch(text.toString())
             }
 
             val dialog = MaterialAlertDialogBuilder(it)
-                .setTitle("Pick a category")
+                .setTitle(getString(R.string.pick_a_category))
                 .setView(binding.root)
                 .create()
 

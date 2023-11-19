@@ -25,18 +25,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
 
-    private val TAG = "MainActivity"
-
-    private val database = Firebase.database("https://simpleinventory-27229-default-rtdb.europe-west1.firebasedatabase.app/")
-
-    // TODO select items/categories
-
-    // TODO show barcode
-    // TODO export barcodes
-
-    // TODO generify stuff
-    // TODO cleanup
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -64,75 +52,9 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
-        //seedDatabase()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp()
-    }
-
-    private fun seedDatabase() {
-        val rootRef = database.reference
-
-        rootRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                val value = dataSnapshot.value
-                Log.d(TAG, "Value is: $value")
-                if (value != null) return
-
-                rootRef.child("categories").setValue(
-                    listOf(
-                        mapOf(
-                            "id" to "1",
-                            "name" to "Food"
-                        ),
-                        mapOf(
-                            "id" to "2",
-                            "name" to "Electronic"
-                        ),
-                        mapOf(
-                            "id" to "3",
-                            "name" to "Book"
-                        )
-                    )
-                )
-                rootRef.child("items").setValue(
-                    listOf(
-                        mapOf(
-                            "id" to "1",
-                            "name" to "Bread",
-                            "category" to mapOf(
-                                "id" to "1",
-                                "name" to "Food"
-                            )
-                        ),
-                        mapOf(
-                            "id" to "2",
-                            "name" to "HDMI cable",
-                            "category" to mapOf(
-                                "id" to "2",
-                                "name" to "Electronic"
-                            )
-                        ),
-                        mapOf(
-                            "id" to "3",
-                            "name" to "Isaac Asimov: Foundation Empire",
-                            "category" to mapOf(
-                                "id" to "3",
-                                "name" to "Book"
-                            )
-                        )
-                    )
-                )
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException())
-            }
-        })
     }
 }

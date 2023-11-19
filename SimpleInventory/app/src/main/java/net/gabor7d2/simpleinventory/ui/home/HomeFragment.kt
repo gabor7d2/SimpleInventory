@@ -41,7 +41,7 @@ class HomeFragment : Fragment(), MenuProvider {
         binding.list.adapter = adapter
 
         binding.fab.setOnClickListener {
-            val newItem = RepositoryManager.instance.addOrUpdateItem(Item(null, "New Item", null, null))
+            val newItem = RepositoryManager.instance.addOrUpdateItem(Item(null, getString(R.string.new_item), null, null))
             findNavController().navigate(
                 MobileNavigationDirections.actionGotoItemDetailsFragment(newItem.name, newItem.id!!)
             )
@@ -62,7 +62,7 @@ class HomeFragment : Fragment(), MenuProvider {
 
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem?.actionView as SearchView
-        searchView.queryHint = "Search globally..."
+        searchView.queryHint = getString(R.string.search_globally)
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = true

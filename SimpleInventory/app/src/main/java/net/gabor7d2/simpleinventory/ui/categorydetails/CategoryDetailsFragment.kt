@@ -10,6 +10,7 @@ import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
+import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.FragmentCategoryDetailsBinding
 import net.gabor7d2.simpleinventory.model.Category
 import net.gabor7d2.simpleinventory.persistence.EntityListener
@@ -43,7 +44,7 @@ class CategoryDetailsFragment(private val categoryId: String) : Fragment(), Enti
         binding.textViewName.text = entity.name
 
         binding.editNameButton.setOnClickListener {
-            val dialog = EditTextDialog("Edit name", prefill = entity.name)
+            val dialog = EditTextDialog(getString(R.string.edit_name), prefill = entity.name)
             clearFragmentResultListener("editTextResult")
             setFragmentResultListener("editTextResult") { _, result ->
                 val text = result.getString("text")!!
@@ -55,7 +56,7 @@ class CategoryDetailsFragment(private val categoryId: String) : Fragment(), Enti
 
 
         val parent =
-            if (entity.parentId == null) "(No parent)"
+            if (entity.parentId == null) getString(R.string.no_parent)
             else RepositoryManager.instance.getCategory(entity.parentId).name
         binding.textViewParent.text = parent
 
@@ -82,8 +83,7 @@ class CategoryDetailsFragment(private val categoryId: String) : Fragment(), Enti
     }
 
     override fun onRemoved(entity: Category) {
-        // TODO test
-        Toast.makeText(context, "Category has been deleted", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, getString(R.string.category_has_been_deleted), Toast.LENGTH_LONG).show()
         findNavController().popBackStack()
     }
 }

@@ -39,7 +39,7 @@ class ItemsOfCategoryFragment(private val categoryId: String) : Fragment(), Menu
         binding.list.adapter = adapter
 
         binding.fab.setOnClickListener {
-            val newItem = RepositoryManager.instance.addOrUpdateItem(Item(null, "New Item", categoryId, null))
+            val newItem = RepositoryManager.instance.addOrUpdateItem(Item(null, getString(R.string.new_item), categoryId, null))
             findNavController().navigate(
                 MobileNavigationDirections.actionGotoItemDetailsFragment(newItem.name, newItem.id!!)
             )
@@ -61,7 +61,7 @@ class ItemsOfCategoryFragment(private val categoryId: String) : Fragment(), Menu
 
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem?.actionView as SearchView
-        searchView.queryHint = "Search items..."
+        searchView.queryHint = getString(R.string.search_items)
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = true
