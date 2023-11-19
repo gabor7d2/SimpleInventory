@@ -5,6 +5,7 @@ data class Item(
     val name: String,
     val categoryId: String?,
     val parentId: String? = null,
+    val favourite: Boolean = false,
 ) : ListItem {
     override val listItemType: Int = ListItem.TYPE_ITEM
 }

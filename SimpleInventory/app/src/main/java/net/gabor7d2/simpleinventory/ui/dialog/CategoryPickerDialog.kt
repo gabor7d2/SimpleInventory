@@ -25,7 +25,7 @@ class CategoryPickerDialog : DialogFragment() {
 
             binding.list.adapter = adapter
             binding.editTextSearch.hint = "Search categories..."
-            binding.editTextSearch.doOnTextChanged { text, start, before, count ->
+            binding.editTextSearch.doOnTextChanged { text, _, _, _ ->
                 adapter.doSearch(text.toString())
             }
 

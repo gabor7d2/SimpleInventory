@@ -11,7 +11,7 @@ class CategoryDetailsPagerAdapter(fragment: Fragment, private val categoryId: St
 
     fun getPageTitle(position: Int): String = when(position){
         0 -> "Details"
-        1 -> "Sub-categories"
+        1 -> "Categories"
         2 -> "Items"
         else -> throw IllegalArgumentException("Invalid position: $position")
     }

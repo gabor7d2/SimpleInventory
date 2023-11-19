@@ -29,6 +29,15 @@ class MainActivity : AppCompatActivity() {
 
     private val database = Firebase.database("https://simpleinventory-27229-default-rtdb.europe-west1.firebasedatabase.app/")
 
+    // TODO remove collection/entity listeners on destroy
+    // TODO favourites
+    // TODO search
+    // TODO select items/categories
+    // TODO show barcode
+    // TODO export barcodes
+    // TODO firebase repository
+    // TODO cleanup
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

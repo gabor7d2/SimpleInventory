@@ -2,6 +2,7 @@ package net.gabor7d2.simpleinventory.persistence.repository
 
 import net.gabor7d2.simpleinventory.model.Category
 import net.gabor7d2.simpleinventory.model.Item
+import net.gabor7d2.simpleinventory.model.ListItem
 import java.util.UUID
 
 class MemoryRepository : Repository() {
@@ -57,12 +58,21 @@ class MemoryRepository : Repository() {
             lock.writeLock().lock()
 
             if (category.id != null && categories.containsKey(category.id)) {
-                val oldParentId = categories[category.id]!!.parentId
-                if (oldParentId != category.parentId) {
-                    categoryChildrenListeners[oldParentId]?.forEach { it.onRemoved(category) }
+                val oldCategory = categories[category.id]!!
+
+                if (oldCategory.parentId != category.parentId) {
+                    categoryChildrenListeners[oldCategory.parentId]?.forEach { it.onRemoved(category) }
                     categoryChildrenListeners[category.parentId]?.forEach { it.onAdded(category) }
                 } else {
                     categoryChildrenListeners[category.parentId]?.forEach { it.onChanged(category) }
+                }
+
+                if (oldCategory.favourite != category.favourite) {
+                    if (category.favourite) {
+                        favouritesListeners.forEach { it.onAdded(category) }
+                    } else {
+                        favouritesListeners.forEach { it.onRemoved(category) }
+                    }
                 }
 
                 categoryListeners[category.id]?.forEach { it.onChanged(category) }
@@ -133,20 +143,28 @@ class MemoryRepository : Repository() {
             lock.writeLock().lock()
 
             if (item.id != null && items.containsKey(item.id)) {
-                val oldParentId = items[item.id]!!.parentId
-                if (oldParentId != item.parentId) {
-                    itemChildrenListeners[oldParentId]?.forEach { it.onRemoved(item) }
+                val oldItem = items[item.id]!!
+
+                if (oldItem.parentId != item.parentId) {
+                    itemChildrenListeners[oldItem.parentId]?.forEach { it.onRemoved(item) }
                     itemChildrenListeners[item.parentId]?.forEach { it.onAdded(item) }
                 } else {
                     itemChildrenListeners[item.parentId]?.forEach { it.onChanged(item) }
                 }
 
-                val oldCategoryId = items[item.id]!!.categoryId
-                if (oldCategoryId != item.categoryId) {
-                    itemsOfCategoryListeners[oldCategoryId]?.forEach { it.onRemoved(item) }
+                if (oldItem.categoryId != item.categoryId) {
+                    itemsOfCategoryListeners[oldItem.categoryId]?.forEach { it.onRemoved(item) }
                     itemsOfCategoryListeners[item.categoryId]?.forEach { it.onAdded(item) }
                 } else {
                     itemsOfCategoryListeners[item.categoryId]?.forEach { it.onChanged(item) }
+                }
+
+                if (oldItem.favourite != item.favourite) {
+                    if (item.favourite) {
+                        favouritesListeners.forEach { it.onAdded(item) }
+                    } else {
+                        favouritesListeners.forEach { it.onRemoved(item) }
+                    }
                 }
 
                 itemListeners[item.id]?.forEach { it.onChanged(item) }
@@ -184,6 +202,15 @@ class MemoryRepository : Repository() {
             }
         } finally {
             lock.writeLock().unlock()
+        }
+    }
+
+    override fun getFavourites(): List<ListItem> {
+        try {
+            lock.readLock().lock()
+            return categories.values.filter { it.favourite } + items.values.filter { it.favourite }
+        } finally {
+            lock.readLock().unlock()
         }
     }
 }

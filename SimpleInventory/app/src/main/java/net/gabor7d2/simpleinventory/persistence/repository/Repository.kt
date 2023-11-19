@@ -4,6 +4,7 @@ import net.gabor7d2.simpleinventory.persistence.CollectionListener
 import net.gabor7d2.simpleinventory.persistence.EntityListener
 import net.gabor7d2.simpleinventory.model.Category
 import net.gabor7d2.simpleinventory.model.Item
+import net.gabor7d2.simpleinventory.model.ListItem
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
 abstract class Repository {
@@ -16,6 +17,8 @@ abstract class Repository {
     protected val categoryChildrenListeners: MutableMap<String?, MutableList<CollectionListener<Category>>> = mutableMapOf()
     protected val itemChildrenListeners: MutableMap<String?, MutableList<CollectionListener<Item>>> = mutableMapOf()
     protected val itemsOfCategoryListeners: MutableMap<String, MutableList<CollectionListener<Item>>> = mutableMapOf()
+
+    protected val favouritesListeners: MutableList<CollectionListener<ListItem>> = mutableListOf()
 
     fun addCategoryListener(categoryId: String, listener: EntityListener<Category>) {
         if (categoryListeners[categoryId] == null) {
@@ -107,6 +110,21 @@ abstract class Repository {
         itemsOfCategoryListeners.forEach { it.value.remove(listener) }
     }
 
+    fun addFavouritesListener(listener: CollectionListener<ListItem>) {
+        favouritesListeners.add(listener)
+
+        try {
+            lock.readLock().lock()
+            getFavourites().forEach { listener.onAdded(it) }
+        } finally {
+            lock.readLock().unlock()
+        }
+    }
+
+    fun removeFavouritesListener(listener: CollectionListener<ListItem>) {
+        favouritesListeners.remove(listener)
+    }
+
 
     abstract fun init()
 
@@ -135,4 +153,6 @@ abstract class Repository {
     abstract fun addOrUpdateItem(item: Item): Item
 
     abstract fun removeItem(id: String)
+
+    abstract fun getFavourites(): List<ListItem>
 }

@@ -1,9 +1,11 @@
 package net.gabor7d2.simpleinventory.ui.item
 
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
+import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.ListItemItemBinding
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
@@ -29,6 +31,16 @@ class ItemViewHolder(
 
         binding.buttonDelete.setOnClickListener {
             RepositoryManager.instance.removeItem(item.id)
+        }
+
+        if (item.favourite) {
+            binding.buttonFavourite.setImageResource(R.drawable.ic_star_filled)
+        } else {
+            binding.buttonFavourite.setImageResource(R.drawable.ic_star_outline)
+        }
+
+        binding.buttonFavourite.setOnClickListener {
+            RepositoryManager.instance.addOrUpdateItem(item.copy(favourite = !item.favourite))
         }
 
         binding.root.setOnClickListener {
