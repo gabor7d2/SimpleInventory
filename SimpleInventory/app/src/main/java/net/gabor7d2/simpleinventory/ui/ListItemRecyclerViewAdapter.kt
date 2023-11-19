@@ -31,7 +31,7 @@ class ListItemRecyclerViewAdapter<T : ListItem>(
                         LayoutInflater.from(parent.context),
                         parent,
                         false
-                    )
+                    ), navController
                 )
             ListItem.TYPE_ITEM -> return ItemViewHolder(
                 ListItemItemBinding.inflate(

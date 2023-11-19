@@ -24,38 +24,6 @@
         android:contentDescription="Edit Name"
         android:src="@drawable/ic_edit" />
 
-    <!-- Category -->
-    <TextView
-        style="@style/DetailsLabel"
-        android:text="Category:" />
-
-    <TextView
-        android:id="@+id/textViewCategory"
-        style="@style/DetailsValue"
-        tools:text="A/V Cables" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/editCategoryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="Change Category"
-            android:src="@drawable/ic_edit" />
-
-        <ImageButton
-            android:id="@+id/openCategoryDetailsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="Open Category Details"
-            android:src="@drawable/ic_open" />
-    </LinearLayout>
-
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

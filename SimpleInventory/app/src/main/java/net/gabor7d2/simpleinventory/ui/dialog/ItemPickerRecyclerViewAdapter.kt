@@ -3,7 +3,7 @@ package net.gabor7d2.simpleinventory.ui.dialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import net.gabor7d2.simpleinventory.databinding.ListItemItemPickerBinding
+import net.gabor7d2.simpleinventory.databinding.ListItemPickerBinding
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 
@@ -20,7 +20,7 @@ class ItemPickerRecyclerViewAdapter(private val onItemSelected: (Item) -> Unit) 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemPickerViewHolder {
         return ItemPickerViewHolder(
-            ListItemItemPickerBinding.inflate(
+            ListItemPickerBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -39,11 +39,11 @@ class ItemPickerRecyclerViewAdapter(private val onItemSelected: (Item) -> Unit) 
         notifyDataSetChanged()
     }
 
-    inner class ItemPickerViewHolder(private val binding: ListItemItemPickerBinding) :
+    inner class ItemPickerViewHolder(private val binding: ListItemPickerBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Item, onItemSelected: (Item) -> Unit) {
-            binding.textViewName.text = item.name
+            binding.textView.text = item.name
             binding.root.setOnClickListener {
                 onItemSelected(item)
             }

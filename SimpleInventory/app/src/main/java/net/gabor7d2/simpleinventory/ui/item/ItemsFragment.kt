@@ -7,15 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
-import net.gabor7d2.simpleinventory.R
-import net.gabor7d2.simpleinventory.databinding.FragmentItemsBinding
+import net.gabor7d2.simpleinventory.databinding.FragmentListItemsBinding
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.ui.ListItemRecyclerViewAdapter
 
 class ItemsFragment(private val itemId: String? = null) : Fragment() {
 
-    private var _binding: FragmentItemsBinding? = null
+    private var _binding: FragmentListItemsBinding? = null
 
     private val binding get() = _binding!!
 
@@ -24,14 +23,14 @@ class ItemsFragment(private val itemId: String? = null) : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentItemsBinding.inflate(inflater, container, false)
+        _binding = FragmentListItemsBinding.inflate(inflater, container, false)
 
         val adapter = ListItemRecyclerViewAdapter<Item>(findNavController())
         RepositoryManager.instance.addItemChildrenListener(itemId, adapter)
         binding.list.adapter = adapter
 
         binding.fab.setOnClickListener {
-            val newItem = RepositoryManager.instance.addOrUpdateItem(Item(null, "New Item", null))
+            val newItem = RepositoryManager.instance.addOrUpdateItem(Item(null, "New Item", null, itemId))
             findNavController().navigate(
                 MobileNavigationDirections.actionGotoItemDetailsFragment(newItem.name, newItem.id!!)
             )
@@ -42,7 +41,6 @@ class ItemsFragment(private val itemId: String? = null) : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         _binding = null
     }
 }

@@ -9,6 +9,10 @@
         android:id="@+id/action_goto_itemDetailsFragment"
         app:destination="@id/itemDetailsFragment" />
 
+    <action
+        android:id="@+id/action_goto_categoryDetailsFragment"
+        app:destination="@id/categoryDetailsFragment" />
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="net.gabor7d2.simpleinventory.ui.home.HomeFragment"
@@ -25,12 +29,12 @@
         android:id="@+id/itemsFragment"
         android:name="net.gabor7d2.simpleinventory.ui.item.ItemsFragment"
         android:label="@string/title_items"
-        tools:layout="@layout/fragment_items" >
-    </fragment>
+        tools:layout="@layout/fragment_items" />
+
     <fragment
         android:id="@+id/itemDetailsFragment"
         android:name="net.gabor7d2.simpleinventory.ui.itemdetails.ItemDetailsTabbedFragment"
-        android:label="{title}" >
+        android:label="{title}">
         <argument
             android:name="title"
             app:argType="string" />
@@ -39,5 +43,16 @@
             app:argType="string" />
     </fragment>
 
+    <fragment
+        android:id="@+id/categoryDetailsFragment"
+        android:name="net.gabor7d2.simpleinventory.ui.categorydetails.CategoryDetailsTabbedFragment"
+        android:label="{title}">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="categoryId"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

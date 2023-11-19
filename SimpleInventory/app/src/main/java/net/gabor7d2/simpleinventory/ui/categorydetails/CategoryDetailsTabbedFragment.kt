@@ -1,4 +1,4 @@
-package net.gabor7d2.simpleinventory.ui.itemdetails
+package net.gabor7d2.simpleinventory.ui.categorydetails
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,9 +8,8 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
 import net.gabor7d2.simpleinventory.databinding.FragmentTabbedBinding
-import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 
-class ItemDetailsTabbedFragment : Fragment() {
+class CategoryDetailsTabbedFragment : Fragment() {
 
     private var _binding: FragmentTabbedBinding? = null
 
@@ -23,8 +22,8 @@ class ItemDetailsTabbedFragment : Fragment() {
     ): View {
         _binding = FragmentTabbedBinding.inflate(inflater, container, false)
 
-        val args: ItemDetailsTabbedFragmentArgs by navArgs()
-        val adapter = ItemDetailsPagerAdapter(this, args.itemId)
+        val args: CategoryDetailsTabbedFragmentArgs by navArgs()
+        val adapter = CategoryDetailsPagerAdapter(this, args.categoryId)
         binding.viewPager.adapter = adapter
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->

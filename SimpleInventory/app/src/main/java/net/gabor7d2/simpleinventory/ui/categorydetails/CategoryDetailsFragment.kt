@@ -1,4 +1,4 @@
-package net.gabor7d2.simpleinventory.ui.itemdetails
+package net.gabor7d2.simpleinventory.ui.categorydetails
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,17 +10,16 @@ import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
-import net.gabor7d2.simpleinventory.databinding.FragmentItemDetailsBinding
-import net.gabor7d2.simpleinventory.model.Item
+import net.gabor7d2.simpleinventory.databinding.FragmentCategoryDetailsBinding
+import net.gabor7d2.simpleinventory.model.Category
 import net.gabor7d2.simpleinventory.persistence.EntityListener
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.ui.dialog.CategoryPickerDialog
 import net.gabor7d2.simpleinventory.ui.dialog.EditTextDialog
-import net.gabor7d2.simpleinventory.ui.dialog.ItemPickerDialog
 
-class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListener<Item> {
+class CategoryDetailsFragment(private val categoryId: String) : Fragment(), EntityListener<Category> {
 
-    private var _binding: FragmentItemDetailsBinding? = null
+    private var _binding: FragmentCategoryDetailsBinding? = null
 
     private val binding get() = _binding!!
 
@@ -29,18 +28,18 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentItemDetailsBinding.inflate(inflater, container, false)
-        RepositoryManager.instance.addItemListener(itemId, this)
+        _binding = FragmentCategoryDetailsBinding.inflate(inflater, container, false)
+        RepositoryManager.instance.addCategoryListener(categoryId, this)
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        RepositoryManager.instance.removeItemListener(this)
+        RepositoryManager.instance.removeCategoryListener(this)
         _binding = null
     }
 
-    override fun onChanged(entity: Item) {
+    override fun onChanged(entity: Category) {
         binding.textViewName.text = entity.name
 
         binding.editNameButton.setOnClickListener {
@@ -48,7 +47,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
             clearFragmentResultListener("editTextResult")
             setFragmentResultListener("editTextResult") { _, result ->
                 val text = result.getString("text")!!
-                RepositoryManager.instance.addOrUpdateItem(entity.copy(name = text))
+                RepositoryManager.instance.addOrUpdateCategory(entity.copy(name = text))
                 clearFragmentResultListener("editTextResult")
             }
             dialog.show(parentFragmentManager, "EditTextDialog")
@@ -57,7 +56,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
 
         val parent =
             if (entity.parentId == null) "(No parent)"
-            else RepositoryManager.instance.getItem(entity.parentId).name
+            else RepositoryManager.instance.getCategory(entity.parentId).name
         binding.textViewParent.text = parent
 
         binding.openParentDetailsButton.visibility = if (entity.parentId == null) View.GONE else View.VISIBLE
@@ -65,53 +64,26 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
         if (entity.parentId != null) {
             binding.openParentDetailsButton.setOnClickListener {
                 findNavController().navigate(
-                    MobileNavigationDirections.actionGotoItemDetailsFragment(parent, entity.parentId)
+                    MobileNavigationDirections.actionGotoCategoryDetailsFragment(parent, entity.parentId)
                 )
             }
         }
 
         binding.editParentButton.setOnClickListener {
-            val dialog = ItemPickerDialog()
-            clearFragmentResultListener("itemPickerResult")
-            setFragmentResultListener("itemPickerResult") { _, result ->
-                val itemId = result.getString("itemId")
-                RepositoryManager.instance.addOrUpdateItem(entity.copy(parentId = itemId))
-                clearFragmentResultListener("itemPickerResult")
-            }
-            dialog.show(parentFragmentManager, "ItemPickerDialog")
-        }
-
-
-        val category =
-            if (entity.categoryId == null) "(No category)"
-            else RepositoryManager.instance.getCategory(entity.categoryId).name
-        binding.textViewCategory.text = category
-
-        binding.openCategoryDetailsButton.visibility = if (entity.categoryId == null) View.GONE else View.VISIBLE
-
-        if (entity.categoryId != null) {
-            binding.openCategoryDetailsButton.setOnClickListener {
-                findNavController().navigate(
-                    MobileNavigationDirections.actionGotoCategoryDetailsFragment(category, entity.categoryId)
-                )
-            }
-        }
-
-        binding.editCategoryButton.setOnClickListener {
             val dialog = CategoryPickerDialog()
             clearFragmentResultListener("categoryPickerResult")
             setFragmentResultListener("categoryPickerResult") { _, result ->
                 val categoryId = result.getString("categoryId")
-                RepositoryManager.instance.addOrUpdateItem(entity.copy(categoryId = categoryId))
+                RepositoryManager.instance.addOrUpdateCategory(entity.copy(parentId = categoryId))
                 clearFragmentResultListener("categoryPickerResult")
             }
             dialog.show(parentFragmentManager, "CategoryPickerDialog")
         }
     }
 
-    override fun onRemoved(entity: Item) {
+    override fun onRemoved(entity: Category) {
         // TODO test
-        Toast.makeText(context, "Item has been deleted", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "Category has been deleted", Toast.LENGTH_LONG).show()
         findNavController().popBackStack()
     }
 }

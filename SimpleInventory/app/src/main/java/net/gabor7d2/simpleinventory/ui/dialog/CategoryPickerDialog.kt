@@ -7,7 +7,7 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import net.gabor7d2.simpleinventory.databinding.DialogPickerBinding
 
-class ItemPickerDialog : DialogFragment() {
+class CategoryPickerDialog : DialogFragment() {
 
     private lateinit var binding: DialogPickerBinding
 
@@ -15,21 +15,21 @@ class ItemPickerDialog : DialogFragment() {
         return context?.let {
             binding = DialogPickerBinding.inflate(layoutInflater)
 
-            val adapter = ItemPickerRecyclerViewAdapter {
-                parentFragmentManager.setFragmentResult("itemPickerResult", Bundle().apply {
-                    putString("itemId", it.id)
+            val adapter = CategoryPickerRecyclerViewAdapter {
+                parentFragmentManager.setFragmentResult("categoryPickerResult", Bundle().apply {
+                    putString("categoryId", it.id)
                 })
                 dismiss()
             }
 
             binding.list.adapter = adapter
-            binding.editTextSearch.hint = "Search items..."
+            binding.editTextSearch.hint = "Search categories..."
             binding.editTextSearch.doOnTextChanged { text, start, before, count ->
                 adapter.doSearch(text.toString())
             }
 
             MaterialAlertDialogBuilder(it)
-                .setTitle("Pick an item")
+                .setTitle("Pick a category")
                 .setView(binding.root)
                 .create()
         } ?: throw IllegalStateException("Context cannot be null")
