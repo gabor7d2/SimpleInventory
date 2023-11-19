@@ -14,6 +14,7 @@ import net.gabor7d2.simpleinventory.databinding.FragmentItemDetailsBinding
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.persistence.EntityListener
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
+import net.gabor7d2.simpleinventory.ui.dialog.EditTextDialog
 import net.gabor7d2.simpleinventory.ui.dialog.ItemPickerDialog
 
 class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListener<Item> {
@@ -41,6 +42,17 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
     override fun onChanged(entity: Item) {
         binding.textViewName.text = entity.name
 
+        binding.editNameButton.setOnClickListener {
+            val dialog = EditTextDialog("Edit name", prefill = entity.name)
+            clearFragmentResultListener("editTextResult")
+            setFragmentResultListener("editTextResult") { _, result ->
+                val text = result.getString("text")!!
+                RepositoryManager.instance.addOrUpdateItem(entity.copy(name = text))
+                clearFragmentResultListener("editTextResult")
+            }
+            dialog.show(parentFragmentManager, "EditTextDialog")
+        }
+
 
         val parent =
             if (entity.parentId == null) "(No parent)"
@@ -59,6 +71,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
 
         binding.editParentButton.setOnClickListener {
             val dialog = ItemPickerDialog()
+            clearFragmentResultListener("itemPickerResult")
             setFragmentResultListener("itemPickerResult") { _, result ->
                 val itemId = result.getString("itemId")
                 RepositoryManager.instance.addOrUpdateItem(entity.copy(parentId = itemId))

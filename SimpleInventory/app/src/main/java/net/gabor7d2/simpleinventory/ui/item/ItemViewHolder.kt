@@ -1,5 +1,6 @@
 package net.gabor7d2.simpleinventory.ui.item
 
+import android.view.View
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
@@ -23,6 +24,8 @@ class ItemViewHolder(
             if (item.categoryId == null) ""
             else RepositoryManager.instance.getCategory(item.categoryId).name
         binding.textViewCategory.text = category
+
+        binding.textViewCategory.visibility = if (item.categoryId == null) View.GONE else View.VISIBLE
 
         binding.buttonDelete.setOnClickListener {
             RepositoryManager.instance.removeItem(item.id)
