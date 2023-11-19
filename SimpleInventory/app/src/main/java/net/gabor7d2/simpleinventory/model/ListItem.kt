@@ -5,6 +5,10 @@ interface ListItem {
 
     val id: String?
 
+    val name: String
+
+    val favourite: Boolean
+
     companion object {
         const val TYPE_CATEGORY = 1
         const val TYPE_ITEM = 2

@@ -1,23 +1,33 @@
 package net.gabor7d2.simpleinventory.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
+import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.FragmentListItemsBinding
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.model.ListItem
 import net.gabor7d2.simpleinventory.ui.ListItemRecyclerViewAdapter
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), MenuProvider {
 
     private var _binding: FragmentListItemsBinding? = null
 
     private val binding get() = _binding!!
+
+    private lateinit var adapter: ListItemRecyclerViewAdapter<ListItem>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,7 +36,7 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentListItemsBinding.inflate(inflater, container, false)
 
-        val adapter = ListItemRecyclerViewAdapter<ListItem>(findNavController())
+        adapter = ListItemRecyclerViewAdapter(findNavController())
         RepositoryManager.instance.addFavouritesListener(adapter)
         binding.list.adapter = adapter
 
@@ -37,11 +47,47 @@ class HomeFragment : Fragment() {
             )
         }
 
+        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.options_menu, menu)
+
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem?.actionView as SearchView
+        searchView.queryHint = "Search globally..."
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?) = true
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val query = newText ?: ""
+                if (query.isEmpty() && adapter.searchQuery.isNotEmpty()) {
+                    adapter.filter(query)
+                    RepositoryManager.instance.removeGlobalListener(adapter)
+                    adapter.clear()
+                    RepositoryManager.instance.addFavouritesListener(adapter)
+                } else if (query.isNotEmpty() && adapter.searchQuery.isEmpty()) {
+                    adapter.filter(query)
+                    RepositoryManager.instance.removeFavouritesListener(adapter)
+                    adapter.clear()
+                    RepositoryManager.instance.addGlobalListener(adapter)
+                } else {
+                    adapter.filter(query)
+                }
+                return true
+            }
+        })
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return menuItem.itemId == R.id.action_search
     }
 }

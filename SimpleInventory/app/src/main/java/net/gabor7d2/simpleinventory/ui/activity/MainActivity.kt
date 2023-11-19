@@ -2,12 +2,12 @@ package net.gabor7d2.simpleinventory.ui.activity
 
 import android.os.Bundle
 import android.util.Log
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,14 +29,17 @@ class MainActivity : AppCompatActivity() {
 
     private val database = Firebase.database("https://simpleinventory-27229-default-rtdb.europe-west1.firebasedatabase.app/")
 
-    // TODO remove collection/entity listeners on destroy
-    // TODO favourites
     // TODO search
     // TODO select items/categories
     // TODO show barcode
     // TODO export barcodes
+    // TODO refactor repository, extract common stuff from MemmoryRepository
     // TODO firebase repository
+    // TODO firebase register
+    // TODO remove collection/entity listeners on destroy
+    // TODO generify stuff
     // TODO cleanup
+    // TODO recyclerview sort
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

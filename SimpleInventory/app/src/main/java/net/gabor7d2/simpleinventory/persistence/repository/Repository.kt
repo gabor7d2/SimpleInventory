@@ -19,6 +19,7 @@ abstract class Repository {
     protected val itemsOfCategoryListeners: MutableMap<String, MutableList<CollectionListener<Item>>> = mutableMapOf()
 
     protected val favouritesListeners: MutableList<CollectionListener<ListItem>> = mutableListOf()
+    protected val globalListeners: MutableList<CollectionListener<ListItem>> = mutableListOf()
 
     fun addCategoryListener(categoryId: String, listener: EntityListener<Category>) {
         if (categoryListeners[categoryId] == null) {
@@ -125,11 +126,29 @@ abstract class Repository {
         favouritesListeners.remove(listener)
     }
 
+    fun addGlobalListener(listener: CollectionListener<ListItem>) {
+        globalListeners.add(listener)
+
+        try {
+            lock.readLock().lock()
+            getAllCategories().forEach { listener.onAdded(it) }
+            getAllItems().forEach { listener.onAdded(it) }
+        } finally {
+            lock.readLock().unlock()
+        }
+    }
+
+    fun removeGlobalListener(listener: CollectionListener<ListItem>) {
+        globalListeners.remove(listener)
+    }
+
 
     abstract fun init()
 
 
     abstract fun getCategory(id: String): Category
+
+    abstract fun getAllCategories(): List<Category>
 
     abstract fun searchCategories(name: String): List<Category>
 
@@ -144,6 +163,8 @@ abstract class Repository {
 
 
     abstract fun getItem(id: String): Item
+
+    abstract fun getAllItems(): List<Item>
 
     abstract fun searchItems(name: String): List<Item>
 

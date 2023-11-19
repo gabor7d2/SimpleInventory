@@ -11,15 +11,15 @@ class MemoryRepository : Repository() {
     private val items: MutableMap<String, Item> = mutableMapOf()
 
     override fun init() {
-        categories["2"] = Category("2", "Food")
-        categories["3"] = Category("3", "Electronic")
-        categories["4"] = Category("4", "Book")
-        categories["5"] = Category("5", "Boxes")
+        categories["1002"] = Category("1002", "Food")
+        categories["1003"] = Category("1003", "Electronic", favourite = true)
+        categories["1004"] = Category("1004", "Book")
+        categories["1005"] = Category("1005", "Boxes", favourite = true)
 
-        items["1"] = Item("1", "Spicy Bread", "2", "4")
-        items["2"] = Item("2", "DisplayPort cable", "3")
-        items["3"] = Item("3", "Isaac Asimov: Foundation Empire", "4", "4")
-        items["4"] = Item("4", "Box #1", "5")
+        items["1"] = Item("1", "Spicy Bread", "1002", "4")
+        items["2"] = Item("2", "DisplayPort cable", "1003")
+        items["3"] = Item("3", "Isaac Asimov: Foundation Empire", "1004", "4", true)
+        items["4"] = Item("4", "Box #1", "1005")
     }
 
     override fun getCategory(id: String): Category {
@@ -29,6 +29,10 @@ class MemoryRepository : Repository() {
         } finally {
             lock.readLock().unlock()
         }
+    }
+
+    override fun getAllCategories(): List<Category> {
+        return categories.values.toList()
     }
 
     override fun searchCategories(name: String): List<Category> {
@@ -76,6 +80,7 @@ class MemoryRepository : Repository() {
                 }
 
                 categoryListeners[category.id]?.forEach { it.onChanged(category) }
+                globalListeners.forEach { it.onChanged(category) }
                 categories[category.id] = category
                 return category
             } else {
@@ -83,6 +88,7 @@ class MemoryRepository : Repository() {
                     if (category.id != null) category
                     else category.copy(id = UUID.randomUUID().toString())
                 categoryChildrenListeners[newCategory.parentId]?.forEach { it.onAdded(newCategory) }
+                globalListeners.forEach { it.onAdded(newCategory) }
                 categories[newCategory.id!!] = newCategory
                 return newCategory
             }
@@ -99,10 +105,17 @@ class MemoryRepository : Repository() {
                 val category = categories[id]!!
                 categoryChildrenListeners[category.parentId]?.forEach { it.onRemoved(category) }
                 categoryListeners[id]?.forEach { it.onRemoved(category) }
+
+                if (category.favourite) {
+                    favouritesListeners.forEach { it.onRemoved(category) }
+                }
+                globalListeners.forEach { it.onRemoved(category) }
+
                 categories.remove(id)
 
                 for (item in getItemsOfCategory(id)) {
-                    removeItem(item.id!!)
+                    val newItem = item.copy(categoryId = null)
+                    addOrUpdateItem(newItem)
                 }
 
                 for (child in getChildrenOfCategory(id)) {
@@ -123,6 +136,10 @@ class MemoryRepository : Repository() {
         } finally {
             lock.readLock().unlock()
         }
+    }
+
+    override fun getAllItems(): List<Item> {
+        return items.values.toList()
     }
 
     override fun searchItems(name: String): List<Item> {
@@ -168,6 +185,7 @@ class MemoryRepository : Repository() {
                 }
 
                 itemListeners[item.id]?.forEach { it.onChanged(item) }
+                globalListeners.forEach { it.onChanged(item) }
                 items[item.id] = item
                 return item
             } else {
@@ -176,6 +194,7 @@ class MemoryRepository : Repository() {
                     else item.copy(id = UUID.randomUUID().toString())
                 itemChildrenListeners[newItem.parentId]?.forEach { it.onAdded(newItem) }
                 itemsOfCategoryListeners[newItem.categoryId]?.forEach { it.onAdded(newItem) }
+                globalListeners.forEach { it.onAdded(newItem) }
                 items[newItem.id!!] = newItem
                 return newItem
             }
@@ -193,6 +212,11 @@ class MemoryRepository : Repository() {
                 itemChildrenListeners[item.parentId]?.forEach { it.onRemoved(item) }
                 itemsOfCategoryListeners[item.categoryId]?.forEach { it.onRemoved(item) }
                 itemListeners[id]?.forEach { it.onRemoved(item) }
+
+                if (item.favourite) {
+                    favouritesListeners.forEach { it.onRemoved(item) }
+                }
+                globalListeners.forEach { it.onRemoved(item) }
                 items.remove(id)
 
                 for (child in getChildrenOfItem(id)) {

@@ -3,21 +3,29 @@ package net.gabor7d2.simpleinventory.ui.category
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
+import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.FragmentListItemsBinding
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.model.Category
-import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.ui.ListItemRecyclerViewAdapter
 
-class CategoriesFragment(private val categoryId: String? = null) : Fragment() {
+class CategoriesFragment(private val categoryId: String? = null) : Fragment(), MenuProvider {
 
     private var _binding: FragmentListItemsBinding? = null
 
     private val binding get() = _binding!!
+
+    private lateinit var adapter: ListItemRecyclerViewAdapter<Category>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,7 +34,7 @@ class CategoriesFragment(private val categoryId: String? = null) : Fragment() {
     ): View {
         _binding = FragmentListItemsBinding.inflate(inflater, container, false)
 
-        val adapter = ListItemRecyclerViewAdapter<Category>(findNavController())
+        adapter = ListItemRecyclerViewAdapter(findNavController())
         RepositoryManager.instance.addCategoryChildrenListener(categoryId, adapter)
         binding.list.adapter = adapter
 
@@ -37,11 +45,34 @@ class CategoriesFragment(private val categoryId: String? = null) : Fragment() {
             )
         }
 
+        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.options_menu, menu)
+
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem?.actionView as SearchView
+        searchView.queryHint = "Search categories..."
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?) = true
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter(newText ?: "")
+                return true
+            }
+        })
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return menuItem.itemId == R.id.action_search
     }
 }
