@@ -51,6 +51,7 @@ class ItemsOfCategoryFragment(private val categoryId: String) : Fragment(), Menu
     }
 
     override fun onDestroyView() {
+        RepositoryManager.instance.removeItemsOfCategoryListener(adapter)
         super.onDestroyView()
         _binding = null
     }

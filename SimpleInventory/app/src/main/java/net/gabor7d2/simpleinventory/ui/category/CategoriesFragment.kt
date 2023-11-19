@@ -51,6 +51,7 @@ class CategoriesFragment(private val categoryId: String? = null) : Fragment(), M
     }
 
     override fun onDestroyView() {
+        RepositoryManager.instance.removeCategoryChildrenListener(adapter)
         super.onDestroyView()
         _binding = null
     }

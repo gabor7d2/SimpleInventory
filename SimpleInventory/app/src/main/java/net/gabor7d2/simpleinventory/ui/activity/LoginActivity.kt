@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import net.gabor7d2.simpleinventory.persistence.Preferences
@@ -50,6 +51,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.buttonLogin.isEnabled = false
 
+        // sign in to firebase or if user doesnt exist, register
         Firebase.auth.signInWithEmailAndPassword(
             binding.etEmail.text.toString(),
             binding.etPassword.text.toString()
@@ -64,10 +66,29 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         baseContext,
-                        R.string.login_error,
+                        R.string.login_registering,
                         Toast.LENGTH_SHORT,
                     ).show()
-                    binding.buttonLogin.isEnabled = true
+                    Firebase.auth.createUserWithEmailAndPassword(
+                        binding.etEmail.text.toString(),
+                        binding.etPassword.text.toString()
+                    )
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                prefs.storeLoginCredentials(
+                                    binding.etEmail.text.toString(),
+                                    binding.etPassword.text.toString()
+                                )
+                                afterSignIn()
+                            } else {
+                                Toast.makeText(
+                                    baseContext,
+                                    R.string.login_error,
+                                    Toast.LENGTH_SHORT,
+                                ).show()
+                                binding.buttonLogin.isEnabled = true
+                            }
+                        }
                 }
             }
     }

@@ -29,13 +29,10 @@ class MainActivity : AppCompatActivity() {
 
     private val database = Firebase.database("https://simpleinventory-27229-default-rtdb.europe-west1.firebasedatabase.app/")
 
-    // TODO firebase register
     // TODO select items/categories
 
     // TODO show barcode
     // TODO export barcodes
-
-    // TODO remove collection/entity listeners on destroy
 
     // TODO generify stuff
     // TODO cleanup

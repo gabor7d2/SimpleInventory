@@ -5,7 +5,8 @@
     <string name="title_notifications">Notifications</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="button_login">Login</string>
+    <string name="button_login">Login or Register</string>
+    <string name="login_registering">Registering...</string>
     <string name="login_error">Login failed</string>
     <string name="login_error_empty">Login failed: email or password not specified</string>
     <string name="title_categories">Categories</string>

@@ -104,6 +104,7 @@ class ItemsFragment(private val itemId: String? = null) : Fragment(), MenuProvid
 
     override fun onDestroyView() {
         Log.d("ItemsFragment", "${System.identityHashCode(this)} onDestroyView: itemId=$itemId")
+        RepositoryManager.instance.removeItemChildrenListener(adapter)
         super.onDestroyView()
         _binding = null
     }
