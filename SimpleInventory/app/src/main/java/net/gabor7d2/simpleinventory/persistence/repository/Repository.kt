@@ -11,6 +11,9 @@ abstract class Repository {
 
     protected val lock = ReentrantReadWriteLock()
 
+    protected val categories: MutableMap<String, Category> = mutableMapOf()
+    protected val items: MutableMap<String, Item> = mutableMapOf()
+
     protected val categoryListeners: MutableMap<String, MutableList<EntityListener<Category>>> = mutableMapOf()
     protected val itemListeners: MutableMap<String, MutableList<EntityListener<Item>>> = mutableMapOf()
 
@@ -145,35 +148,231 @@ abstract class Repository {
 
     abstract fun init()
 
+    private fun <T> withReadLock(block: () -> T): T {
+        try {
+            lock.readLock().lock()
+            return block()
+        } finally {
+            lock.readLock().unlock()
+        }
+    }
 
-    abstract fun getCategory(id: String): Category
+    private fun <T> withWriteLock(block: () -> T): T {
+        try {
+            lock.writeLock().lock()
+            return block()
+        } finally {
+            lock.writeLock().unlock()
+        }
+    }
 
-    abstract fun getAllCategories(): List<Category>
 
-    abstract fun searchCategories(name: String): List<Category>
+    fun getCategory(id: String): Category {
+        return withReadLock { categories[id] ?: throw IllegalArgumentException("Category with id $id not found") }
+    }
+
+    fun getAllCategories(): List<Category> {
+        return withReadLock { categories.values.toList() }
+    }
+
+    fun searchCategories(name: String): List<Category> {
+        return withReadLock { categories.values.filter { it.name.contains(name, ignoreCase = true) } }
+    }
 
     // returns root categories if id is null
-    abstract fun getChildrenOfCategory(id: String?): List<Category>
+    fun getChildrenOfCategory(id: String?): List<Category> {
+        return withReadLock { categories.values.filter { it.parentId == id } }
+    }
 
-    abstract fun getItemsOfCategory(id: String): List<Item>
-
-    abstract fun addOrUpdateCategory(category: Category): Category
-
-    abstract fun removeCategory(id: String)
+    fun getItemsOfCategory(id: String): List<Item> {
+        return withReadLock { items.values.filter { it.categoryId == id } }
+    }
 
 
-    abstract fun getItem(id: String): Item
+    fun addOrUpdateCategory(category: Category): Category {
+        return withWriteLock {
+            if (category.id != null && categories.containsKey(category.id)) {
+                if (categories[category.id] == category) return@withWriteLock category
+                doUpdateCategory(category)
+                category
+            } else {
+                doAddCategory(category)
+            }
+        }
+    }
 
-    abstract fun getAllItems(): List<Item>
+    protected abstract fun doAddCategory(category: Category): Category
 
-    abstract fun searchItems(name: String): List<Item>
+    protected abstract fun doUpdateCategory(category: Category)
+
+    protected fun notifyAddCategory(newCategory: Category) {
+        categoryChildrenListeners[newCategory.parentId]?.forEach { it.onAdded(newCategory) }
+        globalListeners.forEach { it.onAdded(newCategory) }
+
+        if (newCategory.favourite) {
+            favouritesListeners.forEach { it.onAdded(newCategory) }
+        }
+    }
+
+    protected fun notifyUpdateCategory(newCategory: Category) {
+        val oldCategory = categories[newCategory.id]!!
+
+        if (oldCategory.parentId != newCategory.parentId) {
+            categoryChildrenListeners[oldCategory.parentId]?.forEach { it.onRemoved(oldCategory) }
+            categoryChildrenListeners[newCategory.parentId]?.forEach { it.onAdded(newCategory) }
+        } else {
+            categoryChildrenListeners[newCategory.parentId]?.forEach { it.onChanged(newCategory) }
+        }
+
+        if (oldCategory.favourite != newCategory.favourite) {
+            if (newCategory.favourite) {
+                favouritesListeners.forEach { it.onAdded(newCategory) }
+            } else {
+                favouritesListeners.forEach { it.onRemoved(newCategory) }
+            }
+        }
+
+        categoryListeners[newCategory.id]?.forEach { it.onChanged(newCategory) }
+        globalListeners.forEach { it.onChanged(newCategory) }
+    }
+
+
+    fun removeCategory(id: String) {
+        withWriteLock {
+            if (categories.containsKey(id)) {
+                doRemoveCategory(id)
+
+                for (child in getChildrenOfCategory(id)) {
+                    val newCategory = child.copy(parentId = null)
+                    addOrUpdateCategory(newCategory)
+                }
+
+                for (item in getItemsOfCategory(id)) {
+                    val newItem = item.copy(categoryId = null)
+                    addOrUpdateItem(newItem)
+                }
+            }
+        }
+    }
+
+    protected abstract fun doRemoveCategory(id: String)
+
+    protected fun notifyRemoveCategory(category: Category) {
+        categoryChildrenListeners[category.parentId]?.forEach { it.onRemoved(category) }
+        categoryListeners[category.id]?.forEach { it.onRemoved(category) }
+
+        globalListeners.forEach { it.onRemoved(category) }
+        if (category.favourite) {
+            favouritesListeners.forEach { it.onRemoved(category) }
+        }
+    }
+
+
+
+    fun getItem(id: String): Item {
+        return withReadLock { items[id] ?: throw IllegalArgumentException("Item with id $id not found") }
+    }
+
+    fun getAllItems(): List<Item> {
+        return withReadLock { items.values.toList() }
+    }
+
+    fun searchItems(name: String): List<Item> {
+        return withReadLock { items.values.filter { it.name.contains(name, ignoreCase = true) } }
+    }
 
     // returns root items if id is null
-    abstract fun getChildrenOfItem(id: String?): List<Item>
+    fun getChildrenOfItem(id: String?): List<Item> {
+        return withReadLock { items.values.filter { it.parentId == id } }
+    }
 
-    abstract fun addOrUpdateItem(item: Item): Item
 
-    abstract fun removeItem(id: String)
+    fun addOrUpdateItem(item: Item): Item {
+        return withWriteLock {
+            if (item.id != null && items.containsKey(item.id)) {
+                if (items[item.id] == item) return@withWriteLock item
+                doUpdateItem(item)
+                item
+            } else {
+                doAddItem(item)
+            }
+        }
+    }
 
-    abstract fun getFavourites(): List<ListItem>
+    protected abstract fun doAddItem(item: Item): Item
+
+    protected abstract fun doUpdateItem(item: Item)
+
+    protected fun notifyAddItem(newItem: Item) {
+        itemChildrenListeners[newItem.parentId]?.forEach { it.onAdded(newItem) }
+        itemsOfCategoryListeners[newItem.categoryId]?.forEach { it.onAdded(newItem) }
+        globalListeners.forEach { it.onAdded(newItem) }
+
+        if (newItem.favourite) {
+            favouritesListeners.forEach { it.onAdded(newItem) }
+        }
+    }
+
+    protected fun notifyUpdateItem(newItem: Item) {
+        val oldItem = items[newItem.id]!!
+
+        if (oldItem.parentId != newItem.parentId) {
+            itemChildrenListeners[oldItem.parentId]?.forEach { it.onRemoved(oldItem) }
+            itemChildrenListeners[newItem.parentId]?.forEach { it.onAdded(newItem) }
+        } else {
+            itemChildrenListeners[newItem.parentId]?.forEach { it.onChanged(newItem) }
+        }
+
+        if (oldItem.categoryId != newItem.categoryId) {
+            itemsOfCategoryListeners[oldItem.categoryId]?.forEach { it.onRemoved(oldItem) }
+            itemsOfCategoryListeners[newItem.categoryId]?.forEach { it.onAdded(newItem) }
+        } else {
+            itemsOfCategoryListeners[newItem.categoryId]?.forEach { it.onChanged(newItem) }
+        }
+
+        if (oldItem.favourite != newItem.favourite) {
+            if (newItem.favourite) {
+                favouritesListeners.forEach { it.onAdded(newItem) }
+            } else {
+                favouritesListeners.forEach { it.onRemoved(newItem) }
+            }
+        }
+
+        itemListeners[newItem.id]?.forEach { it.onChanged(newItem) }
+        globalListeners.forEach { it.onChanged(newItem) }
+    }
+
+
+    fun removeItem(id: String) {
+        withWriteLock {
+            if (items.containsKey(id)) {
+                doRemoveItem(id)
+
+                for (child in getChildrenOfItem(id)) {
+                    val newItem = child.copy(parentId = null)
+                    addOrUpdateItem(newItem)
+                }
+            }
+        }
+    }
+
+    protected abstract fun doRemoveItem(id: String)
+
+    protected fun notifyRemoveItem(item: Item) {
+        itemChildrenListeners[item.parentId]?.forEach { it.onRemoved(item) }
+        itemsOfCategoryListeners[item.categoryId]?.forEach { it.onRemoved(item) }
+        itemListeners[item.id]?.forEach { it.onRemoved(item) }
+
+        globalListeners.forEach { it.onRemoved(item) }
+        if (item.favourite) {
+            favouritesListeners.forEach { it.onRemoved(item) }
+        }
+    }
+
+
+    fun getFavourites(): List<ListItem> {
+        return withReadLock {
+            categories.values.filter { it.favourite } + items.values.filter { it.favourite }
+        }
+    }
 }

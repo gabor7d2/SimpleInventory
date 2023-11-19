@@ -29,13 +29,11 @@ class MainActivity : AppCompatActivity() {
 
     private val database = Firebase.database("https://simpleinventory-27229-default-rtdb.europe-west1.firebasedatabase.app/")
 
+    // TODO firebase register
     // TODO select items/categories
+
     // TODO show barcode
     // TODO export barcodes
-
-    // TODO refactor repository, extract common stuff from MemmoryRepository
-    // TODO firebase repository
-    // TODO firebase register
 
     // TODO remove collection/entity listeners on destroy
 
@@ -71,7 +69,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         //seedDatabase()
-        listenToChanges()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -139,35 +136,6 @@ class MainActivity : AppCompatActivity() {
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException())
             }
-        })
-    }
-
-    private fun listenToChanges() {
-        database.getReference("categories").addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val category = snapshot.getValue<Category>()
-                Log.d(TAG, "Category added: $category")
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                val category = snapshot.getValue<Category>()
-                Log.d(TAG, "Category changed: $category")
-            }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                val category = snapshot.getValue<Category>()
-                Log.d(TAG, "Category removed: $category")
-            }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                val category = snapshot.getValue<Category>()
-                Log.d(TAG, "Category moved: $category")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w(TAG, "Cancelled", error.toException())
-            }
-
         })
     }
 }
