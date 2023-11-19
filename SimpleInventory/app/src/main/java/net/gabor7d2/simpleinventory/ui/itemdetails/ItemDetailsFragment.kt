@@ -111,7 +111,6 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
     }
 
     override fun onRemoved(entity: Item) {
-        // TODO test
         Toast.makeText(context, getString(R.string.item_has_been_deleted), Toast.LENGTH_LONG).show()
         findNavController().popBackStack()
     }
