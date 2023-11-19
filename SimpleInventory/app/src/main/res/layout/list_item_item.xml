@@ -13,7 +13,6 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:orientation="vertical">
 
         <TextView
@@ -34,14 +33,17 @@
     </LinearLayout>
 
     <ImageButton
+        android:id="@+id/buttonFavourite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:padding="8dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_star_outline" />
+
+    <ImageButton
         android:id="@+id/buttonDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_delete" />
-
-    <ImageButton
-        android:id="@+id/buttonFavourite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_star_outline" />
 </LinearLayout>

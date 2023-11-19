@@ -23,6 +23,7 @@ class EditTextDialog(
             binding.editText.hint = hint
             binding.editText.setText(prefill)
             binding.editText.selectAll()
+            binding.editText.requestFocus()
             binding.editText.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     setFragmentResult()
