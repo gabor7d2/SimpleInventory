@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <!-- Name -->
     <TextView
@@ -22,7 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:contentDescription="Edit Name"
-        android:src="@drawable/ic_edit" />
+        android:src="@drawable/ic_edit"
+        app:tint="?attr/imageButtonBackground" />
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
@@ -50,14 +52,16 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:contentDescription="Change Parent"
-            android:src="@drawable/ic_edit" />
+            android:src="@drawable/ic_edit"
+            app:tint="?attr/imageButtonBackground" />
 
         <ImageButton
             android:id="@+id/openParentDetailsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="Open Parent Details"
-            android:src="@drawable/ic_open" />
+            android:src="@drawable/ic_open"
+            app:tint="?attr/imageButtonBackground" />
     </LinearLayout>
 
 </LinearLayout>

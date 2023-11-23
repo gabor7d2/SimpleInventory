@@ -1,29 +1,33 @@
 package net.gabor7d2.simpleinventory.ui.activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.getValue
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.ActivityMainBinding
-import net.gabor7d2.simpleinventory.model.Category
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var navController: NavController
+
+    // TODO select items/categories
+
+    // TODO show barcode
+    // TODO export barcodes
+
+    // TODO update actionbar if name is edited
+    // TODO fix dark mode appearance
+    // TODO splash screen
+
+    // TODO generify stuff
+    // TODO cleanup
+    // TODO animations
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
