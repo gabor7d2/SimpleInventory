@@ -1,7 +1,5 @@
 package net.gabor7d2.simpleinventory.ui.category
 
-import android.graphics.drawable.ColorDrawable
-import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavController
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.widget.RecyclerView

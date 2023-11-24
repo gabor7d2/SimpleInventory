@@ -1,93 +1,48 @@
 package net.gabor7d2.simpleinventory.ui.home
 
-import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
-import androidx.core.view.MenuProvider
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
 import net.gabor7d2.simpleinventory.R
-import net.gabor7d2.simpleinventory.databinding.FragmentListItemsBinding
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.model.ListItem
+import net.gabor7d2.simpleinventory.ui.ListItemFragmentBase
 import net.gabor7d2.simpleinventory.ui.ListItemRecyclerViewAdapter
 
-class HomeFragment : Fragment(), MenuProvider {
+class HomeFragment : ListItemFragmentBase<ListItem>() {
 
-    private var _binding: FragmentListItemsBinding? = null
+    override val searchHint: String
+        get() = getString(R.string.search_globally)
 
-    private val binding get() = _binding!!
-
-    private lateinit var adapter: ListItemRecyclerViewAdapter<ListItem>
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentListItemsBinding.inflate(inflater, container, false)
-
-        adapter = ListItemRecyclerViewAdapter(findNavController())
+    override fun registerAdapterAsListener(adapter: ListItemRecyclerViewAdapter<ListItem>) {
         RepositoryManager.instance.addFavouritesListener(adapter)
-        binding.list.adapter = adapter
+    }
 
-        binding.fab.setOnClickListener {
-            val newItem = RepositoryManager.instance.addOrUpdateItem(Item(null, getString(R.string.new_item), null, null))
-            findNavController().navigate(
-                MobileNavigationDirections.actionGotoItemDetailsFragment(newItem.name, newItem.id!!)
-            )
+    override fun unregisterAdapterAsListener(adapter: ListItemRecyclerViewAdapter<ListItem>) {
+        RepositoryManager.instance.removeFavouritesListener(adapter)
+    }
+
+    override fun onFabClicked() {
+        val newItem = RepositoryManager.instance.addOrUpdateItem(Item(null, getString(R.string.new_item), null, null))
+        findNavController().navigate(
+            MobileNavigationDirections.actionGotoItemDetailsFragment(newItem.name, newItem.id!!)
+        )
+    }
+
+    override fun onSearchQueryChanged(newQuery: String?) {
+        val query = newQuery ?: ""
+        if (query.isEmpty() && adapter.searchQuery.isNotEmpty()) {
+            adapter.filter(query)
+            RepositoryManager.instance.removeGlobalListener(adapter)
+            adapter.clear()
+            RepositoryManager.instance.addFavouritesListener(adapter)
+        } else if (query.isNotEmpty() && adapter.searchQuery.isEmpty()) {
+            adapter.filter(query)
+            RepositoryManager.instance.removeFavouritesListener(adapter)
+            adapter.clear()
+            RepositoryManager.instance.addGlobalListener(adapter)
+        } else {
+            adapter.filter(query)
         }
-
-        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.options_menu, menu)
-
-        val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem?.actionView as SearchView
-        searchView.queryHint = getString(R.string.search_globally)
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?) = true
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                val query = newText ?: ""
-                if (query.isEmpty() && adapter.searchQuery.isNotEmpty()) {
-                    adapter.filter(query)
-                    RepositoryManager.instance.removeGlobalListener(adapter)
-                    adapter.clear()
-                    RepositoryManager.instance.addFavouritesListener(adapter)
-                } else if (query.isNotEmpty() && adapter.searchQuery.isEmpty()) {
-                    adapter.filter(query)
-                    RepositoryManager.instance.removeFavouritesListener(adapter)
-                    adapter.clear()
-                    RepositoryManager.instance.addGlobalListener(adapter)
-                } else {
-                    adapter.filter(query)
-                }
-                return true
-            }
-        })
-    }
-
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return menuItem.itemId == R.id.action_search
     }
 }

@@ -1,7 +1,6 @@
 package net.gabor7d2.simpleinventory.ui.item
 
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavController
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.widget.RecyclerView
