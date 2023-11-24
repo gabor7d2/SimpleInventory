@@ -1,6 +1,9 @@
 package net.gabor7d2.simpleinventory.model
 
+import com.google.firebase.database.Exclude
+
 interface ListItem {
+    @get:Exclude
     val listItemType: Int
 
     val id: String?

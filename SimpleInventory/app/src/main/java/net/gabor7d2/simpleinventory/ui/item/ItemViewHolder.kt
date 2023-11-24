@@ -3,6 +3,7 @@ package net.gabor7d2.simpleinventory.ui.item
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavController
+import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.widget.RecyclerView
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
 import net.gabor7d2.simpleinventory.R
@@ -15,10 +16,17 @@ class ItemViewHolder(
     private val navController: NavController
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: Item) {
+    private var item: Item? = null
+
+    init {
+        itemId
+    }
+
+    fun bind(item: Item, selected: Boolean) {
         if (item.id == null) {
             throw IllegalArgumentException("Item id cannot be null")
         }
+        this.item = item
 
         binding.textViewName.text = item.name
 
@@ -28,10 +36,6 @@ class ItemViewHolder(
         binding.textViewCategory.text = category
 
         binding.textViewCategory.visibility = if (item.categoryId == null) View.GONE else View.VISIBLE
-
-        binding.buttonDelete.setOnClickListener {
-            RepositoryManager.instance.removeItem(item.id)
-        }
 
         if (item.favourite) {
             binding.buttonFavourite.setImageResource(R.drawable.ic_star_filled)
@@ -49,4 +53,10 @@ class ItemViewHolder(
             )
         }
     }
+
+    fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> =
+        object : ItemDetailsLookup.ItemDetails<String>() {
+            override fun getPosition(): Int = bindingAdapterPosition
+            override fun getSelectionKey(): String = item?.id ?: throw IllegalStateException()
+        }
 }

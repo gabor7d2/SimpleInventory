@@ -25,4 +25,10 @@
     <string name="new_item">New Item</string>
     <string name="no_category">(No category)</string>
     <string name="item_has_been_deleted">Item has been deleted</string>
+    <string name="search">Search</string>
+    <string name="delete">Delete</string>
+    <string name="add_to_favourites">Add to Favourites</string>
+    <string name="remove_from_favourites">Remove from Favourites</string>
+    <string name="export_barcodes">Export barcodes</string>
+    <string name="select_all">Select all</string>
 </resources>

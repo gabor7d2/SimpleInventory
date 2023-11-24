@@ -42,11 +42,4 @@
         android:padding="8dp"
         android:src="@drawable/ic_star_outline"
         app:tint="?attr/imageButtonBackground" />
-
-    <ImageButton
-        android:id="@+id/buttonDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_delete"
-        app:tint="?attr/imageButtonBackground" />
 </LinearLayout>

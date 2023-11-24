@@ -16,18 +16,16 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
 
-    // TODO select items/categories
-
     // TODO show barcode
     // TODO export barcodes
 
     // TODO update actionbar if name is edited
-    // TODO fix dark mode appearance
     // TODO splash screen
 
     // TODO generify stuff
     // TODO cleanup
     // TODO animations
+    // TODO remember search query on back navigation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
