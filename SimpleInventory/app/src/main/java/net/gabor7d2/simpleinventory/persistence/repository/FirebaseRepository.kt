@@ -20,12 +20,16 @@ class FirebaseRepository : Repository() {
     private val database = Firebase.database("https://simpleinventory-27229-default-rtdb.europe-west1.firebasedatabase.app/")
 
     override fun init() {
+        database.setPersistenceEnabled(true)
+
         database.getReference(CATEGORIES_PATH).addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val category = snapshot.getValue<Category>()
                 if (category != null) {
                     notifyAddCategory(category)
-                    categories[category.id!!] = category
+                    if (!categories.containsKey(category.id!!)) {
+                        categories[category.id] = category
+                    }
                 }
                 Log.d("FirebaseRepository", "Category added: $category")
             }
@@ -60,7 +64,9 @@ class FirebaseRepository : Repository() {
                 val item = snapshot.getValue<Item>()
                 if (item != null) {
                     notifyAddItem(item)
-                    items[item.id!!] = item
+                    if (!items.containsKey(item.id!!)) {
+                        items[item.id] = item
+                    }
                 }
                 Log.d("FirebaseRepository", "Item added: $item")
             }
@@ -91,10 +97,10 @@ class FirebaseRepository : Repository() {
         })
     }
 
-
     override fun doAddCategory(category: Category): Category {
         val newCategory = category.copy(id = database.getReference(CATEGORIES_PATH).push().key!!)
         database.getReference(CATEGORIES_PATH).child(newCategory.id!!).setValue(newCategory)
+        categories[newCategory.id] = newCategory
         return newCategory
     }
 
@@ -110,6 +116,7 @@ class FirebaseRepository : Repository() {
     override fun doAddItem(item: Item): Item {
         val newItem = item.copy(id = database.getReference(ITEMS_PATH).push().key!!)
         database.getReference(ITEMS_PATH).child(newItem.id!!).setValue(newItem)
+        items[newItem.id] = newItem
         return newItem
     }
 
