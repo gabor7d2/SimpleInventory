@@ -15,8 +15,9 @@ import net.gabor7d2.simpleinventory.ui.ListItemRecyclerViewAdapter
 
 class HomeFragment : ListItemFragmentBase<ListItem>() {
 
-    override val searchHint: String
-        get() = getString(R.string.search_globally)
+    override val searchHint by lazy {
+        getString(R.string.search_globally)
+    }
 
     override fun registerAdapterAsListener(adapter: ListItemRecyclerViewAdapter<ListItem>) {
         RepositoryManager.instance.addFavouritesListener(adapter)

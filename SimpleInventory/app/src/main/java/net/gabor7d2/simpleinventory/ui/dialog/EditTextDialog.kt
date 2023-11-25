@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.clearFragmentResultListener
+import androidx.fragment.app.setFragmentResultListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import net.gabor7d2.simpleinventory.databinding.DialogEditTextBinding
 
@@ -13,6 +16,12 @@ class EditTextDialog(
     private val hint: String = "",
     private val prefill: String = ""
 ) : DialogFragment() {
+
+    companion object {
+        private val RESULT_KEY = "editTextResult"
+        private val TEXT_KEY = "text"
+        private val DIALOG_TAG = "EditTextDialog"
+    }
 
     private lateinit var binding: DialogEditTextBinding
 
@@ -50,5 +59,14 @@ class EditTextDialog(
         parentFragmentManager.setFragmentResult("editTextResult", Bundle().apply {
             putString("text", binding.editText.text.toString())
         })
+    }
+
+    fun show(parentFragment: Fragment, onResult: (text: String) -> Unit) {
+        parentFragment.clearFragmentResultListener(RESULT_KEY)
+        parentFragment.setFragmentResultListener(RESULT_KEY) { _, result ->
+            onResult(result.getString(TEXT_KEY)!!)
+            parentFragment.clearFragmentResultListener(RESULT_KEY)
+        }
+        show(parentFragment.parentFragmentManager, DIALOG_TAG)
     }
 }

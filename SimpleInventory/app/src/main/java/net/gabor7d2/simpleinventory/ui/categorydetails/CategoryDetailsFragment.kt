@@ -11,8 +11,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
-import androidx.fragment.app.clearFragmentResultListener
-import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
@@ -66,15 +64,10 @@ class CategoryDetailsFragment(private val categoryId: String) : Fragment(), Menu
         binding.textViewName.text = entity.name
 
         binding.editNameButton.setOnClickListener {
-            val dialog = EditTextDialog(getString(R.string.edit_name), prefill = entity.name)
-            clearFragmentResultListener("editTextResult")
-            setFragmentResultListener("editTextResult") { _, result ->
-                val text = result.getString("text")!!
-                (activity as AppCompatActivity).supportActionBar?.title = text
-                RepositoryManager.instance.addOrUpdateCategory(entity.copy(name = text))
-                clearFragmentResultListener("editTextResult")
+            EditTextDialog(getString(R.string.edit_name), prefill = entity.name).show(this) {
+                (activity as AppCompatActivity).supportActionBar?.title = it
+                RepositoryManager.instance.renameCategory(entity, it)
             }
-            dialog.show(parentFragmentManager, "EditTextDialog")
         }
 
 
@@ -82,6 +75,12 @@ class CategoryDetailsFragment(private val categoryId: String) : Fragment(), Menu
             if (entity.parentId == null) getString(R.string.no_parent)
             else RepositoryManager.instance.getCategory(entity.parentId).name
         binding.textViewParent.text = parent
+
+        binding.editParentButton.setOnClickListener {
+            CategoryPickerDialog().show(this) {
+                RepositoryManager.instance.changeCategoryParent(entity, it)
+            }
+        }
 
         binding.openParentDetailsButton.visibility = if (entity.parentId == null) View.GONE else View.VISIBLE
 
@@ -91,17 +90,6 @@ class CategoryDetailsFragment(private val categoryId: String) : Fragment(), Menu
                     MobileNavigationDirections.actionGotoCategoryDetailsFragment(parent, entity.parentId)
                 )
             }
-        }
-
-        binding.editParentButton.setOnClickListener {
-            val dialog = CategoryPickerDialog()
-            clearFragmentResultListener("categoryPickerResult")
-            setFragmentResultListener("categoryPickerResult") { _, result ->
-                val categoryId = result.getString("categoryId")
-                RepositoryManager.instance.addOrUpdateCategory(entity.copy(parentId = categoryId))
-                clearFragmentResultListener("categoryPickerResult")
-            }
-            dialog.show(parentFragmentManager, "CategoryPickerDialog")
         }
     }
 

@@ -176,7 +176,7 @@ abstract class Repository {
     }
 
     fun searchCategories(name: String): List<Category> {
-        return withReadLock { categories.values.filter { it.name.contains(name, ignoreCase = true) } }
+        return withReadLock { categories.values.filter { it.name.contains(name, ignoreCase = true) }.sortedBy { it.name } }
     }
 
     // returns root categories if id is null
@@ -278,7 +278,7 @@ abstract class Repository {
     }
 
     fun searchItems(name: String): List<Item> {
-        return withReadLock { items.values.filter { it.name.contains(name, ignoreCase = true) } }
+        return withReadLock { items.values.filter { it.name.contains(name, ignoreCase = true) }.sortedBy { it.name } }
     }
 
     // returns root items if id is null
@@ -374,5 +374,43 @@ abstract class Repository {
         return withReadLock {
             categories.values.filter { it.favourite } + items.values.filter { it.favourite }
         }
+    }
+
+
+
+    fun favouriteCategory(category: Category, favourite: Boolean) {
+        addOrUpdateCategory(category.copy(favourite = favourite))
+    }
+
+    fun favouriteCategory(categoryId: String, favourite: Boolean) {
+        withWriteLock { favouriteCategory(getCategory(categoryId), favourite) }
+    }
+
+    fun renameCategory(category: Category, newName: String) {
+        addOrUpdateCategory(category.copy(name = newName))
+    }
+
+    fun changeCategoryParent(category: Category, newParentId: String?) {
+        addOrUpdateCategory(category.copy(parentId = newParentId))
+    }
+
+    fun favouriteItem(item: Item, favourite: Boolean) {
+        addOrUpdateItem(item.copy(favourite = favourite))
+    }
+
+    fun favouriteItem(itemId: String, favourite: Boolean) {
+        withWriteLock { favouriteItem(getItem(itemId), favourite) }
+    }
+
+    fun renameItem(item: Item, newName: String) {
+        addOrUpdateItem(item.copy(name = newName))
+    }
+
+    fun changeItemParent(item: Item, newParentId: String?) {
+        addOrUpdateItem(item.copy(parentId = newParentId))
+    }
+
+    fun changeItemCategory(item: Item, newCategoryId: String?) {
+        addOrUpdateItem(item.copy(categoryId = newCategoryId))
     }
 }

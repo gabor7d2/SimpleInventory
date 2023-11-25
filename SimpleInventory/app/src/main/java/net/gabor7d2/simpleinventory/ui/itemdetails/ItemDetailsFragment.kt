@@ -11,8 +11,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
-import androidx.fragment.app.clearFragmentResultListener
-import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
@@ -68,42 +66,10 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), MenuProvider
         binding.textViewName.text = entity.name
 
         binding.editNameButton.setOnClickListener {
-            val dialog = EditTextDialog(getString(R.string.edit_name), prefill = entity.name)
-            clearFragmentResultListener("editTextResult")
-            setFragmentResultListener("editTextResult") { _, result ->
-                val text = result.getString("text")!!
-                (activity as AppCompatActivity).supportActionBar?.title = text
-                RepositoryManager.instance.addOrUpdateItem(entity.copy(name = text))
-                clearFragmentResultListener("editTextResult")
+            EditTextDialog(getString(R.string.edit_name), prefill = entity.name).show(this) {
+                (activity as AppCompatActivity).supportActionBar?.title = it
+                RepositoryManager.instance.renameItem(entity, it)
             }
-            dialog.show(parentFragmentManager, "EditTextDialog")
-        }
-
-
-        val parent =
-            if (entity.parentId == null) getString(R.string.no_parent)
-            else RepositoryManager.instance.getItem(entity.parentId).name
-        binding.textViewParent.text = parent
-
-        binding.openParentDetailsButton.visibility = if (entity.parentId == null) View.GONE else View.VISIBLE
-
-        if (entity.parentId != null) {
-            binding.openParentDetailsButton.setOnClickListener {
-                findNavController().navigate(
-                    MobileNavigationDirections.actionGotoItemDetailsFragment(parent, entity.parentId)
-                )
-            }
-        }
-
-        binding.editParentButton.setOnClickListener {
-            val dialog = ItemPickerDialog()
-            clearFragmentResultListener("itemPickerResult")
-            setFragmentResultListener("itemPickerResult") { _, result ->
-                val itemId = result.getString("itemId")
-                RepositoryManager.instance.addOrUpdateItem(entity.copy(parentId = itemId))
-                clearFragmentResultListener("itemPickerResult")
-            }
-            dialog.show(parentFragmentManager, "ItemPickerDialog")
         }
 
 
@@ -111,6 +77,12 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), MenuProvider
             if (entity.categoryId == null) getString(R.string.no_category)
             else RepositoryManager.instance.getCategory(entity.categoryId).name
         binding.textViewCategory.text = category
+
+        binding.editCategoryButton.setOnClickListener {
+            CategoryPickerDialog().show(this) {
+                RepositoryManager.instance.changeItemCategory(entity, it)
+            }
+        }
 
         binding.openCategoryDetailsButton.visibility = if (entity.categoryId == null) View.GONE else View.VISIBLE
 
@@ -122,15 +94,26 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), MenuProvider
             }
         }
 
-        binding.editCategoryButton.setOnClickListener {
-            val dialog = CategoryPickerDialog()
-            clearFragmentResultListener("categoryPickerResult")
-            setFragmentResultListener("categoryPickerResult") { _, result ->
-                val categoryId = result.getString("categoryId")
-                RepositoryManager.instance.addOrUpdateItem(entity.copy(categoryId = categoryId))
-                clearFragmentResultListener("categoryPickerResult")
+
+        val parent =
+            if (entity.parentId == null) getString(R.string.no_parent)
+            else RepositoryManager.instance.getItem(entity.parentId).name
+        binding.textViewParent.text = parent
+
+        binding.editParentButton.setOnClickListener {
+            ItemPickerDialog().show(this) {
+                RepositoryManager.instance.changeItemParent(entity, it)
             }
-            dialog.show(parentFragmentManager, "CategoryPickerDialog")
+        }
+
+        binding.openParentDetailsButton.visibility = if (entity.parentId == null) View.GONE else View.VISIBLE
+
+        if (entity.parentId != null) {
+            binding.openParentDetailsButton.setOnClickListener {
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGotoItemDetailsFragment(parent, entity.parentId)
+                )
+            }
         }
     }
 

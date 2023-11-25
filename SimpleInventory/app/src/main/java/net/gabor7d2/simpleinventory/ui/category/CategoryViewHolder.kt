@@ -31,7 +31,7 @@ class CategoryViewHolder(
         }
 
         binding.buttonFavourite.setOnClickListener {
-            RepositoryManager.instance.addOrUpdateCategory(category.copy(favourite = !category.favourite))
+            RepositoryManager.instance.favouriteCategory(category, !category.favourite)
         }
 
         binding.root.setOnClickListener {

@@ -1,43 +1,43 @@
 package net.gabor7d2.simpleinventory.ui.dialog
 
-import android.app.Dialog
 import android.os.Bundle
-import android.view.WindowManager
-import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.DialogFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.clearFragmentResultListener
+import androidx.fragment.app.setFragmentResultListener
 import net.gabor7d2.simpleinventory.R
-import net.gabor7d2.simpleinventory.databinding.DialogPickerBinding
+import net.gabor7d2.simpleinventory.model.Category
+import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 
-class CategoryPickerDialog : DialogFragment() {
+class CategoryPickerDialog : PickerDialogBase<Category>() {
 
-    private lateinit var binding: DialogPickerBinding
+    companion object {
+        private val RESULT_KEY = "categoryPickerResult"
+        private val CATEGORY_ID_KEY = "categoryId"
+        private val DIALOG_TAG = "CategoryPickerDialog"
+    }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return context?.let {
-            binding = DialogPickerBinding.inflate(layoutInflater)
+    override val dialogTitle by lazy { getString(R.string.pick_a_category) }
 
-            val adapter = CategoryPickerRecyclerViewAdapter {
-                parentFragmentManager.setFragmentResult("categoryPickerResult", Bundle().apply {
-                    putString("categoryId", it.id)
-                })
-                dismiss()
-            }
+    override val searchHint by lazy { getString(R.string.search_categories) }
 
-            binding.list.adapter = adapter
-            binding.editTextSearch.hint = getString(R.string.search_categories)
-            binding.editTextSearch.requestFocus()
-            binding.editTextSearch.doOnTextChanged { text, _, _, _ ->
-                adapter.doSearch(text.toString())
-            }
+    override val noItem by lazy { Category(null, getString(R.string.no_category)) }
 
-            val dialog = MaterialAlertDialogBuilder(it)
-                .setTitle(getString(R.string.pick_a_category))
-                .setView(binding.root)
-                .create()
+    override fun listItemNameSupplier(item: Category) = item.name
 
-            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
-            dialog
-        } ?: throw IllegalStateException("Context cannot be null")
+    override fun searchResultSupplier(name: String) = RepositoryManager.instance.searchCategories(name)
+
+    override fun onPick(item: Category) {
+        parentFragmentManager.setFragmentResult("categoryPickerResult", Bundle().apply {
+            putString("categoryId", item.id)
+        })
+    }
+
+    fun show(parentFragment: Fragment, onPick: (categoryId: String) -> Unit) {
+        parentFragment.clearFragmentResultListener(RESULT_KEY)
+        parentFragment.setFragmentResultListener(RESULT_KEY) { _, result ->
+            onPick(result.getString(CATEGORY_ID_KEY)!!)
+            parentFragment.clearFragmentResultListener(RESULT_KEY)
+        }
+        show(parentFragment.parentFragmentManager, DIALOG_TAG)
     }
 }

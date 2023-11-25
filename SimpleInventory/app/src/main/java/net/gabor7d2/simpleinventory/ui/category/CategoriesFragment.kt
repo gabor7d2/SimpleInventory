@@ -10,8 +10,7 @@ import net.gabor7d2.simpleinventory.ui.SelectableListItemFragmentBase
 
 class CategoriesFragment(private val categoryId: String? = null) : SelectableListItemFragmentBase<Category>()  {
 
-    override val searchHint: String
-        get() = getString(R.string.search_categories)
+    override val searchHint by lazy { getString(R.string.search_categories) }
 
     override fun registerAdapterAsListener(adapter: ListItemRecyclerViewAdapter<Category>) {
         RepositoryManager.instance.addCategoryChildrenListener(categoryId, adapter)
@@ -34,17 +33,13 @@ class CategoriesFragment(private val categoryId: String? = null) : SelectableLis
 
     override fun onActionFavourite(itemIds: List<String>) {
         itemIds.forEach {
-            RepositoryManager.instance.addOrUpdateCategory(
-                RepositoryManager.instance.getCategory(it).copy(favourite = true)
-            )
+            RepositoryManager.instance.favouriteCategory(it, true)
         }
     }
 
     override fun onActionUnfavourite(itemIds: List<String>) {
         itemIds.forEach {
-            RepositoryManager.instance.addOrUpdateCategory(
-                RepositoryManager.instance.getCategory(it).copy(favourite = false)
-            )
+            RepositoryManager.instance.favouriteCategory(it, false)
         }
     }
 

@@ -51,7 +51,7 @@ class ItemViewHolder(
         }
 
         binding.buttonFavourite.setOnClickListener {
-            RepositoryManager.instance.addOrUpdateItem(item.copy(favourite = !item.favourite))
+            RepositoryManager.instance.favouriteItem(item, !item.favourite)
         }
 
         binding.root.setOnClickListener {

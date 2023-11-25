@@ -1,43 +1,43 @@
 package net.gabor7d2.simpleinventory.ui.dialog
 
-import android.app.Dialog
 import android.os.Bundle
-import android.view.WindowManager
-import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.DialogFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.clearFragmentResultListener
+import androidx.fragment.app.setFragmentResultListener
 import net.gabor7d2.simpleinventory.R
-import net.gabor7d2.simpleinventory.databinding.DialogPickerBinding
+import net.gabor7d2.simpleinventory.model.Item
+import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 
-class ItemPickerDialog : DialogFragment() {
+class ItemPickerDialog : PickerDialogBase<Item>() {
 
-    private lateinit var binding: DialogPickerBinding
+    companion object {
+        private val RESULT_KEY = "itemPickerResult"
+        private val ITEM_ID_KEY = "itemId"
+        private val DIALOG_TAG = "ItemPickerDialog"
+    }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return context?.let {
-            binding = DialogPickerBinding.inflate(layoutInflater)
+    override val dialogTitle by lazy { getString(R.string.pick_an_item) }
 
-            val adapter = ItemPickerRecyclerViewAdapter {
-                parentFragmentManager.setFragmentResult("itemPickerResult", Bundle().apply {
-                    putString("itemId", it.id)
-                })
-                dismiss()
-            }
+    override val searchHint by lazy { getString(R.string.search_items) }
 
-            binding.list.adapter = adapter
-            binding.editTextSearch.hint = getString(R.string.search_items)
-            binding.editTextSearch.requestFocus()
-            binding.editTextSearch.doOnTextChanged { text, _, _, _ ->
-                adapter.doSearch(text.toString())
-            }
+    override val noItem by lazy { Item(null, getString(R.string.no_item)) }
 
-            val dialog = MaterialAlertDialogBuilder(it)
-                .setTitle(getString(R.string.pick_an_item))
-                .setView(binding.root)
-                .create()
+    override fun listItemNameSupplier(item: Item) = item.name
 
-            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
-            dialog
-        } ?: throw IllegalStateException("Context cannot be null")
+    override fun searchResultSupplier(name: String) = RepositoryManager.instance.searchItems(name)
+
+    override fun onPick(item: Item) {
+        parentFragmentManager.setFragmentResult("itemPickerResult", Bundle().apply {
+            putString("itemId", item.id)
+        })
+    }
+
+    fun show(parentFragment: Fragment, onPick: (itemId: String) -> Unit) {
+        parentFragment.clearFragmentResultListener(RESULT_KEY)
+        parentFragment.setFragmentResultListener(RESULT_KEY) { _, result ->
+            onPick(result.getString(ITEM_ID_KEY)!!)
+            parentFragment.clearFragmentResultListener(RESULT_KEY)
+        }
+        show(parentFragment.parentFragmentManager, DIALOG_TAG)
     }
 }
