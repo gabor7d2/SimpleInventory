@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_export_barcode"
+        android:icon="@drawable/ic_barcode"
+        android:title="@string/export_barcodes"
+        android:visible="false"
+        app:iconTint="@color/white"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_delete"
+        android:title="@string/delete"
+        android:visible="true"
+        app:iconTint="@color/white"
+        app:showAsAction="always" />
 </menu>

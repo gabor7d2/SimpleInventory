@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.navOptions
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -19,9 +20,12 @@ class MainActivity : AppCompatActivity() {
     // TODO show barcode
     // TODO export barcodes
 
-    // TODO update actionbar if name is edited
+    // TODO app icon
+    // TODO navbar icons
     // TODO splash screen
-
+    // TODO logout
+    // TODO show dialog if user registered
+    // TODO delete confirmation dialog
     // TODO generify stuff
     // TODO cleanup
     // TODO animations
@@ -50,7 +54,14 @@ class MainActivity : AppCompatActivity() {
         navView.setOnItemSelectedListener { item ->
             navController.popBackStack(R.id.homeFragment, inclusive = false)
             if (item.itemId != R.id.homeFragment) {
-                navController.navigate(item.itemId)
+                navController.navigate(item.itemId, null, navOptions {
+                    anim {
+                        enter = R.anim.fade_in
+                        exit = R.anim.fade_out
+                        popEnter = R.anim.fade_in
+                        popExit = R.anim.fade_out
+                    }
+                })
             }
             true
         }

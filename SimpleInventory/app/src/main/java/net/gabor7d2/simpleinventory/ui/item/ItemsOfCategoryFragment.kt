@@ -33,6 +33,10 @@ class ItemsOfCategoryFragment(private val categoryId: String) : SelectableListIt
         adapter.filter(newQuery ?: "")
     }
 
+    override fun instantiateAdapter(): ListItemRecyclerViewAdapter<Item> {
+        return ListItemRecyclerViewAdapter(findNavController(), true)
+    }
+
     override fun onSetMenuItemVisibilities(menu: Menu, selectedItems: Int) {
         super.onSetMenuItemVisibilities(menu, selectedItems)
         menu.findItem(R.id.action_export_barcode).isVisible = selectedItems > 0

@@ -2,6 +2,7 @@ package net.gabor7d2.simpleinventory.persistence
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.util.Log
 
 class Preferences(private val context: Context) {
 
@@ -31,7 +32,11 @@ class Preferences(private val context: Context) {
         editor.putBoolean(CREDENTIALS_SAVED, false)
         editor.remove(EMAIL)
         editor.remove(PASSWORD)
-        editor.apply()
+        val success = editor.apply()
+        Log.d("Preferences", "Success: $success")
+        Log.d("Preferences", "Credentials saved: ${prefs.getBoolean(CREDENTIALS_SAVED, false)}")
+        Log.d("Preferences", "Email: ${prefs.getString(EMAIL, "")}")
+        Log.d("Preferences", "Password: ${prefs.getString(PASSWORD, "")}")
     }
 
     fun getEmail(): String {

@@ -23,9 +23,9 @@ import net.gabor7d2.simpleinventory.persistence.CollectionListener
 import net.gabor7d2.simpleinventory.ui.category.CategoryViewHolder
 import net.gabor7d2.simpleinventory.ui.item.ItemViewHolder
 
-
 class ListItemRecyclerViewAdapter<T : ListItem>(
-    private val navController: NavController
+    private val navController: NavController,
+    private val isItemsOfCategory: Boolean = false
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     CollectionListener<T> {
 
@@ -75,7 +75,7 @@ class ListItemRecyclerViewAdapter<T : ListItem>(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
-                ), navController
+                ), navController, isItemsOfCategory
             )
             else -> throw IllegalArgumentException("Unknown viewType: $viewType")
         }

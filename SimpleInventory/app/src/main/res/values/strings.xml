@@ -31,4 +31,5 @@
     <string name="remove_from_favourites">Remove from Favourites</string>
     <string name="export_barcodes">Export barcodes</string>
     <string name="select_all">Select all</string>
+    <string name="log_out">Log out</string>
 </resources>

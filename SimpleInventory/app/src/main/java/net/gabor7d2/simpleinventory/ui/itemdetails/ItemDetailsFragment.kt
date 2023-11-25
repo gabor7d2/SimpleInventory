@@ -3,11 +3,17 @@ package net.gabor7d2.simpleinventory.ui.itemdetails
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
 import net.gabor7d2.simpleinventory.R
@@ -19,7 +25,7 @@ import net.gabor7d2.simpleinventory.ui.dialog.CategoryPickerDialog
 import net.gabor7d2.simpleinventory.ui.dialog.EditTextDialog
 import net.gabor7d2.simpleinventory.ui.dialog.ItemPickerDialog
 
-class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListener<Item> {
+class ItemDetailsFragment(private val itemId: String) : Fragment(), MenuProvider, EntityListener<Item> {
 
     private var _binding: FragmentItemDetailsBinding? = null
 
@@ -32,6 +38,8 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
     ): View {
         _binding = FragmentItemDetailsBinding.inflate(inflater, container, false)
         RepositoryManager.instance.addItemListener(itemId, this)
+
+        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
         return binding.root
     }
 
@@ -39,6 +47,21 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
         super.onDestroyView()
         RepositoryManager.instance.removeItemListener(this)
         _binding = null
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.details_menu, menu)
+        menu.findItem(R.id.action_export_barcode).isVisible = true
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return when (menuItem.itemId) {
+            R.id.action_delete -> {
+                RepositoryManager.instance.removeItem(itemId)
+                true
+            }
+            else -> false
+        }
     }
 
     override fun onChanged(entity: Item) {
@@ -49,6 +72,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), EntityListen
             clearFragmentResultListener("editTextResult")
             setFragmentResultListener("editTextResult") { _, result ->
                 val text = result.getString("text")!!
+                (activity as AppCompatActivity).supportActionBar?.title = text
                 RepositoryManager.instance.addOrUpdateItem(entity.copy(name = text))
                 clearFragmentResultListener("editTextResult")
             }

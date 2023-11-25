@@ -12,7 +12,8 @@ import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 
 class ItemViewHolder(
     private val binding: ListItemItemBinding,
-    private val navController: NavController
+    private val navController: NavController,
+    private val isItemOfCategory: Boolean
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private var item: Item? = null
@@ -29,12 +30,19 @@ class ItemViewHolder(
 
         binding.textViewName.text = item.name
 
-        val category =
-            if (item.categoryId == null) ""
-            else RepositoryManager.instance.getCategory(item.categoryId).name
-        binding.textViewCategory.text = category
-
-        binding.textViewCategory.visibility = if (item.categoryId == null) View.GONE else View.VISIBLE
+        if (isItemOfCategory) {
+            val parentItem =
+                if (item.parentId == null) ""
+                else RepositoryManager.instance.getItem(item.parentId).name
+            binding.textViewCategory.text = parentItem
+            binding.textViewCategory.visibility = if (item.parentId == null) View.GONE else View.VISIBLE
+        } else {
+            val category =
+                if (item.categoryId == null) ""
+                else RepositoryManager.instance.getCategory(item.categoryId).name
+            binding.textViewCategory.text = category
+            binding.textViewCategory.visibility = if (item.categoryId == null) View.GONE else View.VISIBLE
+        }
 
         if (item.favourite) {
             binding.buttonFavourite.setImageResource(R.drawable.ic_star_filled)

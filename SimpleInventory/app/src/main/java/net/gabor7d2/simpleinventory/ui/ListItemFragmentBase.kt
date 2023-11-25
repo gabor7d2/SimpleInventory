@@ -30,7 +30,7 @@ abstract class ListItemFragmentBase<T : ListItem> : Fragment(), MenuProvider {
     ): View {
         _binding = FragmentListItemsBinding.inflate(inflater, container, false)
 
-        adapter = ListItemRecyclerViewAdapter(findNavController())
+        adapter = instantiateAdapter()
         registerAdapterAsListener(adapter)
         binding.list.adapter = adapter
 
@@ -78,4 +78,8 @@ abstract class ListItemFragmentBase<T : ListItem> : Fragment(), MenuProvider {
     abstract fun onFabClicked()
 
     abstract fun onSearchQueryChanged(newQuery: String?)
+
+    open fun instantiateAdapter(): ListItemRecyclerViewAdapter<T> {
+        return ListItemRecyclerViewAdapter(findNavController())
+    }
 }
