@@ -1,6 +1,5 @@
 package net.gabor7d2.simpleinventory.ui.itemdetails
 
-import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +24,7 @@ import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.FragmentItemDetailsBinding
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.persistence.EntityListener
+import net.gabor7d2.simpleinventory.persistence.repository.Repository
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.ui.dialog.CategoryPickerDialog
 import net.gabor7d2.simpleinventory.ui.dialog.EditTextDialog
@@ -124,7 +124,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), MenuProvider
         }
 
 
-        val barcodeNumber = entity.barcode.toString().padStart(8, '0')
+        val barcodeNumber = entity.barcode.toString().padStart(Repository.BARCODE_LENGTH, '0')
         binding.barcodeText.text = barcodeNumber
         val multiFormatWriter = MultiFormatWriter()
         try {
@@ -162,7 +162,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), MenuProvider
     }
 
     override fun onRemoved(entity: Item) {
-        Toast.makeText(context, getString(R.string.item_has_been_deleted), Toast.LENGTH_LONG).show()
+        Toast.makeText(context, getString(R.string.item_deleted), Toast.LENGTH_LONG).show()
         findNavController().popBackStack()
     }
 }

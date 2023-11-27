@@ -11,20 +11,18 @@
     <string name="login_error_empty">Login failed: email or password not specified</string>
     <string name="title_categories">Categories</string>
     <string name="title_items">Items</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="new_category">New Category</string>
     <string name="search_categories">Search categories...</string>
     <string name="edit_name">Edit name</string>
     <string name="no_parent">(No parent)</string>
-    <string name="category_has_been_deleted">Category has been deleted</string>
+    <string name="category_deleted">Category has been deleted</string>
     <string name="pick_a_category">Pick a category</string>
     <string name="search_items">Search items...</string>
     <string name="pick_an_item">Pick an item</string>
     <string name="search_globally">Search globally...</string>
     <string name="new_item">New Item</string>
     <string name="no_category">(No category)</string>
-    <string name="item_has_been_deleted">Item has been deleted</string>
+    <string name="item_deleted">Item has been deleted</string>
     <string name="search">Search</string>
     <string name="delete">Delete</string>
     <string name="add_to_favourites">Add to Favourites</string>
@@ -33,4 +31,8 @@
     <string name="select_all">Select all</string>
     <string name="log_out">Log out</string>
     <string name="no_item">(No item)</string>
+    <string name="scan_barcode">Scan barcode</string>
+    <string name="scan_barcode_activity_title">Scan barcode</string>
+    <string name="barcode_invalid">Invalid barcode</string>
+    <string name="barcode_item_not_found">Item not found</string>
 </resources>

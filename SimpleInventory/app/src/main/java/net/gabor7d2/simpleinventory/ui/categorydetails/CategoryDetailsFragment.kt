@@ -94,7 +94,7 @@ class CategoryDetailsFragment(private val categoryId: String) : Fragment(), Menu
     }
 
     override fun onRemoved(entity: Category) {
-        Toast.makeText(context, getString(R.string.category_has_been_deleted), Toast.LENGTH_LONG).show()
+        Toast.makeText(context, getString(R.string.category_deleted), Toast.LENGTH_LONG).show()
         findNavController().popBackStack()
     }
 }

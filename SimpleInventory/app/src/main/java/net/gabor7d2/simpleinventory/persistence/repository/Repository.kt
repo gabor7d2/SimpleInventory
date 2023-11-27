@@ -9,6 +9,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
 
 abstract class Repository {
 
+    companion object {
+        val BARCODE_LENGTH = 8
+    }
+
     protected val lock = ReentrantReadWriteLock()
 
     protected val categories: MutableMap<String, Category> = mutableMapOf()
@@ -271,6 +275,10 @@ abstract class Repository {
 
     fun getItem(id: String): Item {
         return withReadLock { items[id] ?: throw IllegalArgumentException("Item with id $id not found") }
+    }
+
+    fun getItemByBarcode(barcode: Int): Item? {
+        return withReadLock { items.values.find { it.barcode == barcode } }
     }
 
     fun getAllItems(): List<Item> {
