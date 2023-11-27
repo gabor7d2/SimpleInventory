@@ -13,6 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SimpleInventory"
         tools:targetApi="31" >
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="net.gabor7d2.simpleinventory.provider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
         <activity
             android:name=".ui.activity.LoginActivity"
             android:exported="true"
@@ -24,16 +35,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="false"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustNothing" >
-        </activity>
+            android:windowSoftInputMode="adjustNothing" />
+
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="sensor"
             tools:replace="screenOrientation" />
+
     </application>
 
 </manifest>

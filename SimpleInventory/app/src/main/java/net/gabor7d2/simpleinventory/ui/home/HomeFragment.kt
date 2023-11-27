@@ -8,12 +8,12 @@ import androidx.navigation.fragment.findNavController
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
+import net.gabor7d2.simpleinventory.BarcodeUtils
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
 import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.model.ListItem
 import net.gabor7d2.simpleinventory.persistence.Preferences
-import net.gabor7d2.simpleinventory.persistence.repository.Repository
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.ui.ListItemFragmentBase
 import net.gabor7d2.simpleinventory.ui.ListItemRecyclerViewAdapter
@@ -25,7 +25,7 @@ class HomeFragment : ListItemFragmentBase<ListItem>() {
     ) { result: ScanIntentResult ->
         if (result.contents != null) {
             val barcode = result.contents.toIntOrNull()
-            if (result.contents.length != Repository.BARCODE_LENGTH || result.contents.any { !it.isDigit() } || barcode == null) {
+            if (result.contents.length != BarcodeUtils.BARCODE_LENGTH || result.contents.any { !it.isDigit() } || barcode == null) {
                 Toast.makeText(requireContext(), getString(R.string.barcode_invalid), Toast.LENGTH_SHORT).show()
                 return@registerForActivityResult
             }

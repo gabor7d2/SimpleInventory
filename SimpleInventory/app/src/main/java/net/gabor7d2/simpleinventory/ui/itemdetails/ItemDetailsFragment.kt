@@ -15,16 +15,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.MultiFormatWriter
-import com.google.zxing.WriterException
-import com.journeyapps.barcodescanner.BarcodeEncoder
+import net.gabor7d2.simpleinventory.BarcodeUtils
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
 import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.FragmentItemDetailsBinding
 import net.gabor7d2.simpleinventory.model.Item
 import net.gabor7d2.simpleinventory.persistence.EntityListener
-import net.gabor7d2.simpleinventory.persistence.repository.Repository
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.ui.dialog.CategoryPickerDialog
 import net.gabor7d2.simpleinventory.ui.dialog.EditTextDialog
@@ -63,6 +59,11 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), MenuProvider
         return when (menuItem.itemId) {
             R.id.action_delete -> {
                 RepositoryManager.instance.removeItem(itemId)
+                true
+            }
+            R.id.action_export_barcode -> {
+                val item = RepositoryManager.instance.getItem(itemId)
+                BarcodeUtils.exportBarcodes(requireContext(), listOf(item))
                 true
             }
             else -> false
@@ -124,41 +125,13 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), MenuProvider
         }
 
 
-        val barcodeNumber = entity.barcode.toString().padStart(Repository.BARCODE_LENGTH, '0')
-        binding.barcodeText.text = barcodeNumber
-        val multiFormatWriter = MultiFormatWriter()
+        val barcodeText = BarcodeUtils.getBarcodeForItem(entity)
+        binding.barcodeText.text = barcodeText
         try {
-            val bitMatrix = multiFormatWriter.encode(barcodeNumber, BarcodeFormat.CODE_128,800,300)
-            val barcodeEncoder = BarcodeEncoder()
-            val bitmap = barcodeEncoder.createBitmap(bitMatrix)
-            /*bitmap = removeWhiteFromBitmap(bitmap)
-            if (requireContext().resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
-                bitmap = invertBitmap(bitmap)
-            }*/
-            binding.barcodeImage.setImageBitmap(bitmap)
-        } catch (e: WriterException) {
+            binding.barcodeImage.setImageBitmap(BarcodeUtils.generateBitmapForBarcode(barcodeText))
+        } catch (e: Exception) {
             Log.e("ItemDetailsFragment", "Error while displaying barcode: ", e)
         }
-    }
-
-    private fun removeWhiteFromBitmap(bitmap: Bitmap): Bitmap {
-        val pixels = IntArray(bitmap.width * bitmap.height)
-        bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
-        for (i in pixels.indices) {
-            if (pixels[i] == -1) {
-                pixels[i] = 0
-            }
-        }
-        return Bitmap.createBitmap(pixels, bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-    }
-
-    private fun invertBitmap(bitmap: Bitmap): Bitmap {
-        val pixels = IntArray(bitmap.width * bitmap.height)
-        bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
-        for (i in pixels.indices) {
-            pixels[i] = pixels[i] xor 0x00ffffff
-        }
-        return Bitmap.createBitmap(pixels, bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
     }
 
     override fun onRemoved(entity: Item) {

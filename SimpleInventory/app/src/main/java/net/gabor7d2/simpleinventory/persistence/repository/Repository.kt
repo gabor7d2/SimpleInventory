@@ -9,10 +9,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
 
 abstract class Repository {
 
-    companion object {
-        val BARCODE_LENGTH = 8
-    }
-
     protected val lock = ReentrantReadWriteLock()
 
     protected val categories: MutableMap<String, Category> = mutableMapOf()

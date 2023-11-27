@@ -1,7 +1,10 @@
 package net.gabor7d2.simpleinventory.ui.item
 
 import android.view.Menu
+import android.view.MenuItem
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.selection.MutableSelection
+import net.gabor7d2.simpleinventory.BarcodeUtils
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
 import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.model.Item
@@ -35,6 +38,20 @@ class ItemsFragment(private val itemId: String? = null) : SelectableListItemFrag
     override fun onSetMenuItemVisibilities(menu: Menu, selectedItems: Int) {
         super.onSetMenuItemVisibilities(menu, selectedItems)
         menu.findItem(R.id.action_export_barcode).isVisible = selectedItems > 0
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        if (menuItem.itemId == R.id.action_export_barcode) {
+            tracker?.let {
+                val selectionCopy = MutableSelection<String>()
+                it.copySelection(selectionCopy)
+                val items = selectionCopy.toList()
+                    .mapNotNull { RepositoryManager.instance.getItem(it) }
+                    .sortedBy { it.barcode }
+                BarcodeUtils.exportBarcodes(requireContext(), items)
+            }
+        }
+        return super.onMenuItemSelected(menuItem)
     }
 
     override fun onActionFavourite(itemIds: List<String>) {

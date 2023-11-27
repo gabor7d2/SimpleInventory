@@ -1,6 +1,5 @@
 package net.gabor7d2.simpleinventory.ui
 
-import android.R.attr.fragment
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -22,10 +21,9 @@ import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.model.ListItem
 import java.util.UUID
 
-
 abstract class SelectableListItemFragmentBase<T : ListItem> : ListItemFragmentBase<T>() {
 
-    private var tracker: SelectionTracker<String>? = null
+    protected var tracker: SelectionTracker<String>? = null
 
     private var menu: Menu? = null
 
