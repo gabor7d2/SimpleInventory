@@ -4,6 +4,8 @@ import android.util.Log
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.MutableData
+import com.google.firebase.database.Transaction
 import com.google.firebase.database.getValue
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -15,6 +17,7 @@ class FirebaseRepository : Repository() {
     companion object {
         val CATEGORIES_PATH = "categories"
         val ITEMS_PATH = "items"
+        val ITEM_COUNTER_PATH = "itemCounter"
     }
 
     private val database = Firebase.database("https://simpleinventory-27229-default-rtdb.europe-west1.firebasedatabase.app/")
@@ -117,6 +120,7 @@ class FirebaseRepository : Repository() {
         val newItem = item.copy(id = database.getReference(ITEMS_PATH).push().key!!)
         database.getReference(ITEMS_PATH).child(newItem.id!!).setValue(newItem)
         items[newItem.id] = newItem
+        setItemBarcode(newItem)
         return newItem
     }
 
@@ -126,5 +130,26 @@ class FirebaseRepository : Repository() {
 
     override fun doRemoveItem(id: String) {
         database.getReference(ITEMS_PATH).child(id).removeValue()
+    }
+
+    private fun setItemBarcode(item: Item) {
+        database.getReference(ITEM_COUNTER_PATH).runTransaction(object : Transaction.Handler {
+            override fun doTransaction(mutableData: MutableData): Transaction.Result {
+                val counter = mutableData.getValue<Int>() ?: 1000
+
+                mutableData.value = counter + 1
+                database.getReference(ITEMS_PATH).child(item.id!!).child("barcode").setValue(counter)
+                return Transaction.success(mutableData)
+            }
+
+            override fun onComplete(
+                databaseError: DatabaseError?,
+                committed: Boolean,
+                currentData: DataSnapshot?,
+            ) {
+                // Transaction completed
+                Log.d("FirebaseRepository", "postTransaction:onComplete:$databaseError")
+            }
+        })
     }
 }

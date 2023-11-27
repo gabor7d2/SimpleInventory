@@ -1,102 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <!-- Name -->
-    <TextView
-        style="@style/DetailsLabel"
-        android:text="Name:" />
-
-    <TextView
-        android:id="@+id/textViewName"
-        style="@style/DetailsValue"
-        tools:text="HDMI cable" />
-
-    <ImageButton
-        android:id="@+id/editNameButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:contentDescription="Edit Name"
-        android:src="@drawable/ic_edit"
-        app:tint="?attr/imageButtonBackground" />
-
-    <!-- Category -->
-    <TextView
-        style="@style/DetailsLabel"
-        android:text="Category:" />
-
-    <TextView
-        android:id="@+id/textViewCategory"
-        style="@style/DetailsValue"
-        tools:text="A/V Cables" />
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/editCategoryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="Change Category"
-            android:src="@drawable/ic_edit"
-            app:tint="?attr/imageButtonBackground" />
-
-        <ImageButton
-            android:id="@+id/openCategoryDetailsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="Open Category Details"
-            android:src="@drawable/ic_open"
-            app:tint="?attr/imageButtonBackground" />
-    </LinearLayout>
-
-    <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <!-- Parent -->
-    <TextView
-        style="@style/DetailsLabel"
-        android:text="Parent:" />
+        <!-- Name -->
+        <TextView
+            style="@style/DetailsLabel"
+            android:text="Name:" />
 
-    <TextView
-        android:id="@+id/textViewParent"
-        style="@style/DetailsValue"
-        tools:text="Box #1" />
+        <TextView
+            android:id="@+id/textViewName"
+            style="@style/DetailsValue"
+            tools:text="HDMI cable" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        <Button
+            android:id="@+id/editNameButton"
+            style="@style/DetailsButton"
+            android:layout_marginBottom="32dp"
+            android:contentDescription="Edit Name"
+            android:text="Edit"
+            app:icon="@drawable/ic_edit" />
 
-        <ImageButton
-            android:id="@+id/editParentButton"
+        <!-- Category -->
+        <TextView
+            style="@style/DetailsLabel"
+            android:text="Category:" />
+
+        <TextView
+            android:id="@+id/textViewCategory"
+            style="@style/DetailsValue"
+            tools:text="A/V Cables" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="Change Parent"
-            android:src="@drawable/ic_edit"
-            app:tint="?attr/imageButtonBackground" />
+            android:layout_marginBottom="32dp"
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/openParentDetailsButton"
+            <Button
+                android:id="@+id/editCategoryButton"
+                style="@style/DetailsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Edit"
+                app:icon="@drawable/ic_edit" />
+
+            <Button
+                android:id="@+id/openCategoryDetailsButton"
+                style="@style/DetailsButton"
+                android:contentDescription="Open Category Details"
+                android:text="Open"
+                app:icon="@drawable/ic_open" />
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp" />
+
+        <!-- Parent -->
+        <TextView
+            style="@style/DetailsLabel"
+            android:text="Parent:" />
+
+        <TextView
+            android:id="@+id/textViewParent"
+            style="@style/DetailsValue"
+            tools:text="Box #1" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="Open Parent Details"
-            android:src="@drawable/ic_open"
-            app:tint="?attr/imageButtonBackground" />
+            android:layout_marginBottom="32dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/editParentButton"
+                style="@style/DetailsButton"
+                android:layout_marginEnd="8dp"
+                android:text="Edit"
+                app:icon="@drawable/ic_edit" />
+
+            <Button
+                android:id="@+id/openParentDetailsButton"
+                style="@style/DetailsButton"
+                android:text="Open"
+                app:icon="@drawable/ic_open" />
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp" />
+
+        <ImageView
+            android:id="@+id/barcodeImage"
+            android:backgroundTint="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Barcode"
+            app:srcCompat="@drawable/ic_barcode" />
+
+        <TextView
+            android:id="@+id/barcodeText"
+            style="@style/DetailsValue"
+            tools:text="1234567890" />
+
     </LinearLayout>
-
-</LinearLayout>
-
+</ScrollView>

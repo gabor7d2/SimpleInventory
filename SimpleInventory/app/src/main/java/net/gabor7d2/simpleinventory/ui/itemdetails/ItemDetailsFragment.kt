@@ -1,6 +1,9 @@
 package net.gabor7d2.simpleinventory.ui.itemdetails
 
+import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -13,6 +16,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.MultiFormatWriter
+import com.google.zxing.WriterException
+import com.journeyapps.barcodescanner.BarcodeEncoder
 import net.gabor7d2.simpleinventory.MobileNavigationDirections
 import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.databinding.FragmentItemDetailsBinding
@@ -115,6 +122,43 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), MenuProvider
                 )
             }
         }
+
+
+        val barcodeNumber = entity.barcode.toString().padStart(8, '0')
+        binding.barcodeText.text = barcodeNumber
+        val multiFormatWriter = MultiFormatWriter()
+        try {
+            val bitMatrix = multiFormatWriter.encode(barcodeNumber, BarcodeFormat.CODE_128,800,300)
+            val barcodeEncoder = BarcodeEncoder()
+            val bitmap = barcodeEncoder.createBitmap(bitMatrix)
+            /*bitmap = removeWhiteFromBitmap(bitmap)
+            if (requireContext().resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
+                bitmap = invertBitmap(bitmap)
+            }*/
+            binding.barcodeImage.setImageBitmap(bitmap)
+        } catch (e: WriterException) {
+            Log.e("ItemDetailsFragment", "Error while displaying barcode: ", e)
+        }
+    }
+
+    private fun removeWhiteFromBitmap(bitmap: Bitmap): Bitmap {
+        val pixels = IntArray(bitmap.width * bitmap.height)
+        bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+        for (i in pixels.indices) {
+            if (pixels[i] == -1) {
+                pixels[i] = 0
+            }
+        }
+        return Bitmap.createBitmap(pixels, bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+    }
+
+    private fun invertBitmap(bitmap: Bitmap): Bitmap {
+        val pixels = IntArray(bitmap.width * bitmap.height)
+        bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+        for (i in pixels.indices) {
+            pixels[i] = pixels[i] xor 0x00ffffff
+        }
+        return Bitmap.createBitmap(pixels, bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
     }
 
     override fun onRemoved(entity: Item) {

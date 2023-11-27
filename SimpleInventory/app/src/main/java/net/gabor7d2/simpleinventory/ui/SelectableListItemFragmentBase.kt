@@ -1,14 +1,17 @@
 package net.gabor7d2.simpleinventory.ui
 
+import android.R.attr.fragment
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -18,6 +21,7 @@ import androidx.recyclerview.selection.StorageStrategy
 import net.gabor7d2.simpleinventory.R
 import net.gabor7d2.simpleinventory.model.ListItem
 import java.util.UUID
+
 
 abstract class SelectableListItemFragmentBase<T : ListItem> : ListItemFragmentBase<T>() {
 
@@ -66,6 +70,27 @@ abstract class SelectableListItemFragmentBase<T : ListItem> : ListItemFragmentBa
                     switchToSelectionMenuItems(tracker.selection.size())
                 }
             })
+
+        view?.isFocusableInTouchMode = true
+        view?.requestFocus()
+        view?.setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+                if (tracker.hasSelection()) {
+                    tracker.clearSelection()
+                    return true
+                }
+                return false
+            }
+        })
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (tracker.hasSelection()) {
+                tracker.clearSelection()
+            } else {
+                isEnabled = false
+                requireActivity().onBackPressed()
+            }
+        }
 
         return binding.root
     }
@@ -129,6 +154,11 @@ abstract class SelectableListItemFragmentBase<T : ListItem> : ListItemFragmentBa
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         tracker?.onSaveInstanceState(outState)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        tracker?.clearSelection()
     }
 
     private fun switchToSelectionMenuItems(selectedItems: Int) {

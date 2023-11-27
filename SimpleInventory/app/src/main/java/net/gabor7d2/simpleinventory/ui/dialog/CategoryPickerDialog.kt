@@ -32,10 +32,10 @@ class CategoryPickerDialog : PickerDialogBase<Category>() {
         })
     }
 
-    fun show(parentFragment: Fragment, onPick: (categoryId: String) -> Unit) {
+    fun show(parentFragment: Fragment, onPick: (categoryId: String?) -> Unit) {
         parentFragment.clearFragmentResultListener(RESULT_KEY)
         parentFragment.setFragmentResultListener(RESULT_KEY) { _, result ->
-            onPick(result.getString(CATEGORY_ID_KEY)!!)
+            onPick(result.getString(CATEGORY_ID_KEY))
             parentFragment.clearFragmentResultListener(RESULT_KEY)
         }
         show(parentFragment.parentFragmentManager, DIALOG_TAG)

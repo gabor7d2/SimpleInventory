@@ -17,8 +17,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
 
-    // TODO show barcode
     // TODO export barcodes
+
+    // TODO fix details fragment argument
 
     // TODO app icon
     // TODO navbar icons
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     // TODO cleanup
     // TODO animations
     // TODO remember search query on back navigation
+    // TODO material 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

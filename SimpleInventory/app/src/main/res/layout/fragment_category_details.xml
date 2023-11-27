@@ -17,14 +17,12 @@
         style="@style/DetailsValue"
         tools:text="HDMI cable" />
 
-    <ImageButton
+    <Button
         android:id="@+id/editNameButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:contentDescription="Edit Name"
-        android:src="@drawable/ic_edit"
-        app:tint="?attr/imageButtonBackground" />
+        android:text="Edit"
+        app:icon="@drawable/ic_edit"
+        style="@style/DetailsButton" />
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
@@ -46,22 +44,18 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageButton
+        <Button
             android:id="@+id/editParentButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:contentDescription="Change Parent"
-            android:src="@drawable/ic_edit"
-            app:tint="?attr/imageButtonBackground" />
+            android:text="Edit"
+            app:icon="@drawable/ic_edit"
+            style="@style/DetailsButton" />
 
-        <ImageButton
+        <Button
             android:id="@+id/openParentDetailsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="Open Parent Details"
-            android:src="@drawable/ic_open"
-            app:tint="?attr/imageButtonBackground" />
+            android:text="Open"
+            app:icon="@drawable/ic_open"
+            style="@style/DetailsButton" />
     </LinearLayout>
 
 </LinearLayout>
