@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/homeFragment">
+
+    <action
+        android:id="@+id/action_goto_itemDetailsFragment"
+        app:destination="@id/itemDetailsTabbedFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
+    <action
+        android:id="@+id/action_goto_categoryDetailsFragment"
+        app:destination="@id/categoryDetailsTabbedFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="net.gabor7d2.simpleinventory.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_list_items" />
+
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="net.gabor7d2.simpleinventory.ui.category.CategoriesFragment"
+        android:label="@string/title_categories"
+        tools:layout="@layout/fragment_list_items">
+        <argument
+            android:name="categoryId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/itemsFragment"
+        android:name="net.gabor7d2.simpleinventory.ui.item.ItemsFragment"
+        android:label="@string/title_items"
+        tools:layout="@layout/fragment_list_items">
+        <argument
+            android:name="itemId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/itemDetailsTabbedFragment"
+        android:name="net.gabor7d2.simpleinventory.ui.itemdetails.ItemDetailsTabbedFragment"
+        android:label="{title}">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="itemId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/itemDetailsFragment"
+        android:name="net.gabor7d2.simpleinventory.ui.itemdetails.ItemDetailsFragment">
+        <argument
+            android:name="itemId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/categoryDetailsTabbedFragment"
+        android:name="net.gabor7d2.simpleinventory.ui.categorydetails.CategoryDetailsTabbedFragment"
+        android:label="{title}">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="categoryId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/categoryDetailsFragment"
+        android:name="net.gabor7d2.simpleinventory.ui.categorydetails.CategoryDetailsFragment">
+        <argument
+            android:name="categoryId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/itemsOfCategoryFragment"
+        android:name="net.gabor7d2.simpleinventory.ui.categorydetails.ItemsOfCategoryFragment">
+        <argument
+            android:name="categoryId"
+            app:argType="string" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/editTextDialog"
+        android:name="net.gabor7d2.simpleinventory.ui.dialog.EditTextDialog">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="hint"
+            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="prefill"
+            android:defaultValue=""
+            app:argType="string" />
+    </dialog>
+
+</navigation>

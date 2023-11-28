@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "810557908921",
+    "project_id": "simpleinventory-27229",
+    "storage_bucket": "simpleinventory-27229.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810557908921:android:a1eceb7e3541b8a7793868",
+        "android_client_info": {
+          "package_name": "net.gabor7d2.simpleinventory"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ0EGc8HMGDF4ZoEx1dO3TyKe2y5FvI-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
