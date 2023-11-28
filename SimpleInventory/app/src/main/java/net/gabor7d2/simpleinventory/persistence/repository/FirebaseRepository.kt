@@ -34,7 +34,6 @@ class FirebaseRepository : Repository() {
                         categories[category.id] = category
                     }
                 }
-                Log.d("FirebaseRepository", "Category added: $category")
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -43,7 +42,6 @@ class FirebaseRepository : Repository() {
                     notifyUpdateCategory(category)
                     categories[category.id!!] = category
                 }
-                Log.d("FirebaseRepository", "Category changed: $category")
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -52,7 +50,6 @@ class FirebaseRepository : Repository() {
                     notifyRemoveCategory(category)
                     categories.remove(category.id!!)
                 }
-                Log.d("FirebaseRepository", "Category removed: $category")
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
@@ -71,7 +68,6 @@ class FirebaseRepository : Repository() {
                         items[item.id] = item
                     }
                 }
-                Log.d("FirebaseRepository", "Item added: $item")
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -80,7 +76,6 @@ class FirebaseRepository : Repository() {
                     notifyUpdateItem(item)
                     items[item.id!!] = item
                 }
-                Log.d("FirebaseRepository", "Item changed: $item")
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -89,7 +84,6 @@ class FirebaseRepository : Repository() {
                     notifyRemoveItem(item)
                     items.remove(item.id!!)
                 }
-                Log.d("FirebaseRepository", "Item removed: $item")
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}

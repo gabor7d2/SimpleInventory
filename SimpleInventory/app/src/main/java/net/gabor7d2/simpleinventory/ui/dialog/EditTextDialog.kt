@@ -11,11 +11,7 @@ import androidx.fragment.app.setFragmentResultListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import net.gabor7d2.simpleinventory.databinding.DialogEditTextBinding
 
-class EditTextDialog(
-    private val title: String,
-    private val hint: String = "",
-    private val prefill: String = ""
-) : DialogFragment() {
+class EditTextDialog : DialogFragment() {
 
     companion object {
         private val RESULT_KEY = "editTextResult"
@@ -24,6 +20,10 @@ class EditTextDialog(
     }
 
     private lateinit var binding: DialogEditTextBinding
+
+    private val title: String by lazy { EditTextDialogArgs.fromBundle(requireArguments()).title }
+    private val hint: String by lazy { EditTextDialogArgs.fromBundle(requireArguments()).hint }
+    private val prefill: String by lazy { EditTextDialogArgs.fromBundle(requireArguments()).prefill }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return context?.let {

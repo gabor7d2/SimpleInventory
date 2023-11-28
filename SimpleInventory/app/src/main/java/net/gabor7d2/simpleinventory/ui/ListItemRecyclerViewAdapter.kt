@@ -98,7 +98,6 @@ class ListItemRecyclerViewAdapter<T : ListItem>(
     }
 
     override fun onAdded(entity: T) {
-        Log.d("ListItemRecyclerViewAdapter", "${System.identityHashCode(this)} onAdded: ${entity.name}, ${entity.id}")
         allValues.add(entity)
 
         if (entity.name.contains(searchQuery, true)) {
@@ -107,7 +106,6 @@ class ListItemRecyclerViewAdapter<T : ListItem>(
     }
 
     override fun onChanged(entity: T) {
-        Log.d("ListItemRecyclerViewAdapter", "${System.identityHashCode(this)} onChanged: ${entity.name}, ${entity.id}")
         val index = allValues.indexOfFirst { it.id == entity.id }
         allValues[index] = entity
 
@@ -119,7 +117,6 @@ class ListItemRecyclerViewAdapter<T : ListItem>(
     }
 
     override fun onRemoved(entity: T) {
-        Log.d("ListItemRecyclerViewAdapter", "${System.identityHashCode(this)} onRemoved: ${entity.name}, ${entity.id}")
         tracker?.deselect(entity.id!!)
         allValues.remove(entity)
         filteredValues.remove(entity)
@@ -150,16 +147,11 @@ class ListItemRecyclerViewAdapter<T : ListItem>(
             return
         }
 
-        Log.d("ListItemRecyclerViewAdapter", "${System.identityHashCode(this)} filter: $query")
-        Log.d("ListItemRecyclerViewAdapter", "${System.identityHashCode(this)} filter: allValues=${allValues.size}, filteredValues=${filteredValues.size()}")
         val results = allValues.filter { it.name.contains(query, true) }.toMutableList()
-        Log.d("ListItemRecyclerViewAdapter", "${System.identityHashCode(this)} filter: results=${results.size}")
-
         replaceWith(results)
     }
 
     fun clear() {
-        Log.d("ListItemRecyclerViewAdapter", "${System.identityHashCode(this)} clear")
         filteredValues.clear()
         allValues.clear()
     }

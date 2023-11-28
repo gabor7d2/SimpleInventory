@@ -100,7 +100,6 @@ object BarcodeUtils {
         val pdfFile = File(context.filesDir, "Barcodes-${Date().time}.pdf")
         try {
             pdfDocument.writeTo(pdfFile.outputStream())
-            Toast.makeText(context, "PDF file generated", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(context, "Failed to generate PDF file", Toast.LENGTH_SHORT).show()

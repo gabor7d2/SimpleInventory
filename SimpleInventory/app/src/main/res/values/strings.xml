@@ -35,4 +35,11 @@
     <string name="scan_barcode_activity_title">Scan barcode</string>
     <string name="barcode_invalid">Invalid barcode</string>
     <string name="barcode_item_not_found">Item not found</string>
+    <string name="name">Name:</string>
+    <string name="edit">Edit</string>
+    <string name="parent">Parent:</string>
+    <string name="open">Open</string>
+    <string name="category">Category:</string>
+    <string name="barcode">Barcode</string>
+    <string name="create_item">Create Item</string>
 </resources>

@@ -1,6 +1,5 @@
 package net.gabor7d2.simpleinventory.ui.itemdetails
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -24,13 +23,16 @@ import net.gabor7d2.simpleinventory.persistence.EntityListener
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.ui.dialog.CategoryPickerDialog
 import net.gabor7d2.simpleinventory.ui.dialog.EditTextDialog
+import net.gabor7d2.simpleinventory.ui.dialog.EditTextDialogArgs
 import net.gabor7d2.simpleinventory.ui.dialog.ItemPickerDialog
 
-class ItemDetailsFragment(private val itemId: String) : Fragment(), MenuProvider, EntityListener<Item> {
+class ItemDetailsFragment : Fragment(), MenuProvider, EntityListener<Item> {
 
     private var _binding: FragmentItemDetailsBinding? = null
 
     private val binding get() = _binding!!
+
+    private val itemId: String by lazy { ItemDetailsFragmentArgs.fromBundle(requireArguments()).itemId }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,7 +76,12 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), MenuProvider
         binding.textViewName.text = entity.name
 
         binding.editNameButton.setOnClickListener {
-            EditTextDialog(getString(R.string.edit_name), prefill = entity.name).show(this) {
+            EditTextDialog().apply {
+                arguments = EditTextDialogArgs(
+                    title = this@ItemDetailsFragment.getString(R.string.edit_name),
+                    prefill = entity.name
+                ).toBundle()
+            }.show(this) {
                 (activity as AppCompatActivity).supportActionBar?.title = it
                 RepositoryManager.instance.renameItem(entity, it)
             }
@@ -130,7 +137,7 @@ class ItemDetailsFragment(private val itemId: String) : Fragment(), MenuProvider
         try {
             binding.barcodeImage.setImageBitmap(BarcodeUtils.generateBitmapForBarcode(barcodeText))
         } catch (e: Exception) {
-            Log.e("ItemDetailsFragment", "Error while displaying barcode: ", e)
+            Log.w("ItemDetailsFragment", "Error while displaying barcode: ", e)
         }
     }
 

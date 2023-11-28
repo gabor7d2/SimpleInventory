@@ -8,9 +8,11 @@ import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.ui.ListItemRecyclerViewAdapter
 import net.gabor7d2.simpleinventory.ui.SelectableListItemFragmentBase
 
-class CategoriesFragment(private val categoryId: String? = null) : SelectableListItemFragmentBase<Category>()  {
+class CategoriesFragment : SelectableListItemFragmentBase<Category>()  {
 
     override val searchHint by lazy { getString(R.string.search_categories) }
+
+    private val categoryId: String? by lazy { CategoriesFragmentArgs.fromBundle(requireArguments()).categoryId }
 
     override fun registerAdapterAsListener(adapter: ListItemRecyclerViewAdapter<Category>) {
         RepositoryManager.instance.addCategoryChildrenListener(categoryId, adapter)

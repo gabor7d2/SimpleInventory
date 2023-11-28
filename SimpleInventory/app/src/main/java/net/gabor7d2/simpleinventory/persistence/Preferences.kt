@@ -32,11 +32,7 @@ class Preferences(private val context: Context) {
         editor.putBoolean(CREDENTIALS_SAVED, false)
         editor.remove(EMAIL)
         editor.remove(PASSWORD)
-        val success = editor.apply()
-        Log.d("Preferences", "Success: $success")
-        Log.d("Preferences", "Credentials saved: ${prefs.getBoolean(CREDENTIALS_SAVED, false)}")
-        Log.d("Preferences", "Email: ${prefs.getString(EMAIL, "")}")
-        Log.d("Preferences", "Password: ${prefs.getString(PASSWORD, "")}")
+        editor.apply()
     }
 
     fun getEmail(): String {

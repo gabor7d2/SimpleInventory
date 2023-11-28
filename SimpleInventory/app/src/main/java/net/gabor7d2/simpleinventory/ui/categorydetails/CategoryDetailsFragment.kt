@@ -21,12 +21,15 @@ import net.gabor7d2.simpleinventory.persistence.EntityListener
 import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.ui.dialog.CategoryPickerDialog
 import net.gabor7d2.simpleinventory.ui.dialog.EditTextDialog
+import net.gabor7d2.simpleinventory.ui.dialog.EditTextDialogArgs
 
-class CategoryDetailsFragment(private val categoryId: String) : Fragment(), MenuProvider, EntityListener<Category> {
+class CategoryDetailsFragment : Fragment(), MenuProvider, EntityListener<Category> {
 
     private var _binding: FragmentCategoryDetailsBinding? = null
 
     private val binding get() = _binding!!
+
+    private val categoryId: String by lazy { CategoryDetailsFragmentArgs.fromBundle(requireArguments()).categoryId }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,7 +67,12 @@ class CategoryDetailsFragment(private val categoryId: String) : Fragment(), Menu
         binding.textViewName.text = entity.name
 
         binding.editNameButton.setOnClickListener {
-            EditTextDialog(getString(R.string.edit_name), prefill = entity.name).show(this) {
+            EditTextDialog().apply {
+                arguments = EditTextDialogArgs(
+                    title = this@CategoryDetailsFragment.getString(R.string.edit_name),
+                    prefill = entity.name
+                ).toBundle()
+            }.show(this) {
                 (activity as AppCompatActivity).supportActionBar?.title = it
                 RepositoryManager.instance.renameCategory(entity, it)
             }

@@ -1,4 +1,4 @@
-package net.gabor7d2.simpleinventory.ui.item
+package net.gabor7d2.simpleinventory.ui.categorydetails
 
 import android.view.Menu
 import android.view.MenuItem
@@ -12,9 +12,11 @@ import net.gabor7d2.simpleinventory.persistence.repository.RepositoryManager
 import net.gabor7d2.simpleinventory.ui.ListItemRecyclerViewAdapter
 import net.gabor7d2.simpleinventory.ui.SelectableListItemFragmentBase
 
-class ItemsOfCategoryFragment(private val categoryId: String) : SelectableListItemFragmentBase<Item>() {
+class ItemsOfCategoryFragment : SelectableListItemFragmentBase<Item>() {
 
     override val searchHint by lazy { getString(R.string.search_items) }
+
+    private val categoryId: String by lazy { ItemsOfCategoryFragmentArgs.fromBundle(requireArguments()).categoryId }
 
     override fun registerAdapterAsListener(adapter: ListItemRecyclerViewAdapter<Item>) {
         RepositoryManager.instance.addItemsOfCategoryListener(categoryId, adapter)

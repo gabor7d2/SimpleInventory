@@ -17,12 +17,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
 
-    // TODO export barcodes
-
-    // TODO fix details fragment argument
-
-    // TODO app icon
-    // TODO navbar icons
     // TODO splash screen
     // TODO logout
     // TODO show dialog if user registered

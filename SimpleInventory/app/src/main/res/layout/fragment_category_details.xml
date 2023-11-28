@@ -1,62 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <!-- Name -->
-    <TextView
-        style="@style/DetailsLabel"
-        android:text="Name:" />
-
-    <TextView
-        android:id="@+id/textViewName"
-        style="@style/DetailsValue"
-        tools:text="HDMI cable" />
-
-    <Button
-        android:id="@+id/editNameButton"
-        android:layout_marginBottom="32dp"
-        android:text="Edit"
-        app:icon="@drawable/ic_edit"
-        style="@style/DetailsButton" />
-
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp" />
-
-    <!-- Parent -->
-    <TextView
-        style="@style/DetailsLabel"
-        android:text="Parent:" />
-
-    <TextView
-        android:id="@+id/textViewParent"
-        style="@style/DetailsValue"
-        tools:text="Box #1" />
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Name -->
+        <TextView
+            style="@style/DetailsLabel"
+            android:text="@string/name" />
+
+        <TextView
+            android:id="@+id/textViewName"
+            style="@style/DetailsValue"
+            tools:text="HDMI cable" />
 
         <Button
-            android:id="@+id/editParentButton"
-            android:layout_marginEnd="8dp"
-            android:text="Edit"
-            app:icon="@drawable/ic_edit"
-            style="@style/DetailsButton" />
+            android:id="@+id/editNameButton"
+            style="@style/DetailsButton"
+            android:layout_marginBottom="32dp"
+            android:text="@string/edit"
+            app:icon="@drawable/ic_edit" />
 
-        <Button
-            android:id="@+id/openParentDetailsButton"
-            android:text="Open"
-            app:icon="@drawable/ic_open"
-            style="@style/DetailsButton" />
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp" />
+
+        <!-- Parent -->
+        <TextView
+            style="@style/DetailsLabel"
+            android:text="@string/parent" />
+
+        <TextView
+            android:id="@+id/textViewParent"
+            style="@style/DetailsValue"
+            tools:text="Box #1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/editParentButton"
+                style="@style/DetailsButton"
+                android:layout_marginEnd="8dp"
+                android:text="@string/edit"
+                app:icon="@drawable/ic_edit" />
+
+            <Button
+                android:id="@+id/openParentDetailsButton"
+                style="@style/DetailsButton"
+                android:text="@string/open"
+                app:icon="@drawable/ic_open" />
+        </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
-
+</ScrollView>

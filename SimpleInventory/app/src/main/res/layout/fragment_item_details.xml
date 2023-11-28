@@ -14,7 +14,7 @@
         <!-- Name -->
         <TextView
             style="@style/DetailsLabel"
-            android:text="Name:" />
+            android:text="@string/name" />
 
         <TextView
             android:id="@+id/textViewName"
@@ -25,14 +25,13 @@
             android:id="@+id/editNameButton"
             style="@style/DetailsButton"
             android:layout_marginBottom="32dp"
-            android:contentDescription="Edit Name"
-            android:text="Edit"
+            android:text="@string/edit"
             app:icon="@drawable/ic_edit" />
 
         <!-- Category -->
         <TextView
             style="@style/DetailsLabel"
-            android:text="Category:" />
+            android:text="@string/category" />
 
         <TextView
             android:id="@+id/textViewCategory"
@@ -51,14 +50,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Edit"
+                android:text="@string/edit"
                 app:icon="@drawable/ic_edit" />
 
             <Button
                 android:id="@+id/openCategoryDetailsButton"
                 style="@style/DetailsButton"
-                android:contentDescription="Open Category Details"
-                android:text="Open"
+                android:text="@string/open"
                 app:icon="@drawable/ic_open" />
         </LinearLayout>
 
@@ -70,7 +68,7 @@
         <!-- Parent -->
         <TextView
             style="@style/DetailsLabel"
-            android:text="Parent:" />
+            android:text="@string/parent" />
 
         <TextView
             android:id="@+id/textViewParent"
@@ -87,13 +85,13 @@
                 android:id="@+id/editParentButton"
                 style="@style/DetailsButton"
                 android:layout_marginEnd="8dp"
-                android:text="Edit"
+                android:text="@string/edit"
                 app:icon="@drawable/ic_edit" />
 
             <Button
                 android:id="@+id/openParentDetailsButton"
                 style="@style/DetailsButton"
-                android:text="Open"
+                android:text="@string/open"
                 app:icon="@drawable/ic_open" />
         </LinearLayout>
 
@@ -107,7 +105,7 @@
             android:backgroundTint="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="Barcode"
+            android:contentDescription="@string/barcode"
             app:srcCompat="@drawable/ic_barcode" />
 
         <TextView
