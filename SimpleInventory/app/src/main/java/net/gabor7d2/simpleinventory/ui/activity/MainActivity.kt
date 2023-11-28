@@ -17,16 +17,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
 
-    // TODO splash screen
-    // TODO logout
-    // TODO show dialog if user registered
-    // TODO delete confirmation dialog
-    // TODO generify stuff
-    // TODO cleanup
-    // TODO animations
-    // TODO remember search query on back navigation
-    // TODO material 3
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
