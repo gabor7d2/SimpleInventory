@@ -1,12 +1,4 @@
-# Házi feladat specifikáció
-
-## Mobil- és webes szoftverek
-### 2023. 10. 22.
-### Simple Inventory
-### Tóth Gábor Tamás - HAFLCT
-### toth.gabor.tamas@edu.bme.hu
-### Laborvezető: Kövesdán Gábor
-
+# Simple Inventory
 
 ## Bemutatás
 
@@ -92,7 +84,7 @@ DP kábel
 - Perzisztens adattárolás: Firebase
 
 
-# Házi feladat dokumentáció
+# Dokumentáció
 
 ## Entitások kezelése, tárolása
 Az alkalmazás 2 fő entitást kezel: **Item** (tétel) és **Category** (tétel típus).
